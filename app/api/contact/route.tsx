@@ -46,13 +46,13 @@ import { log } from "console";
 export const runtime = "nodejs";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-log(resend)
+log(resend);
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { name, email, phone, message } = body;
 
-    const emailHtml = render(
+    const emailHtml = await render(
       ContactEmail({
         name,
         email,
@@ -62,20 +62,12 @@ export async function POST(req: Request) {
     );
 
     const { data, error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "Maxirain <onboarding@resend.dev>",
       to: [process.env.CONTACT_EMAIL!],
       subject: `New Contact Message from ${name}`,
-      html: "<h1>Hello</h1>",
-
-      // react:  ContactEmail({
-      //   name,
-      //   email,
-      //   phone,
-      //   message,
-      // }),
+      html: emailHtml,
     });
-    console.log("API HIT");
-    console.log("BODY:", { name, email, phone, message });
+
     if (error) {
       console.log("RESEND RESULT:", error);
       return NextResponse.json({ error }, { status: 500 });
