@@ -45,6 +45,7 @@ export default function AboutPage() {
           alt="Industrial Water Systems"
           fill
           className="object-cover"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
           <h1 className="text-4xl md:text-5xl font-semibold text-white">

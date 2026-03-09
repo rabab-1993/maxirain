@@ -8,45 +8,41 @@ export const handler: Handler = async (event) => {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        body: "Method Not Allowed",
-      }; 
+        body: JSON.stringify({ message: "Method Not Allowed" }),
+      };
     }
 
-    const { name, email, phone, message } = JSON.parse(
-      event.body || "{}"
-    );
+    const { name, email, message } = JSON.parse(event.body || "{}");
 
     if (!name || !email || !message) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Missing required fields" }),
+        body: JSON.stringify({ message: "All fields are required" }),
       };
     }
 
     await resend.emails.send({
-      from: "Maxirain <onboarding@resend.dev>",
-      to: "cute.1414h@gmail.com",
-      subject: `New Message from ${name}`,
+      from: "Maxirain Contact <onboarding@resend.dev>",
+      to: [process.env.CONTACT_EMAIL!],
+      subject: `New Contact Message from ${name}`,
+      replyTo: email,
       html: `
-        <h2>Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-        <p><strong>Message:</strong></p>
+        <h2>New Contact Message</h2>
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Message:</b></p>
         <p>${message}</p>
       `,
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ message: "Email sent successfully" }),
     };
-
   } catch (error) {
-    console.error(error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Server Error" }),
+      body: JSON.stringify({ message: "Server error" }),
     };
   }
 };

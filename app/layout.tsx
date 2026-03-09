@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,18 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
           <Navbar />
-          {children}
+          <main className="grow">{children}</main>
+          <Footer />
         </Providers>
-        {/* FOOTER */}
-        <footer className="bg-blue-900 text-blue-100 py-10">
-          <div className="max-w-7xl mx-auto px-6 text-center text-sm">
-            © {new Date().getFullYear()} Maxirain — Water-Efficient Technologies
-          </div>
-        </footer>
       </body>
     </html>
   );

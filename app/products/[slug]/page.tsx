@@ -47,11 +47,11 @@ export default async function ProductDetails({
   if (!product) return notFound();
 
   return (
-    <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+    <main className="h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           {/* IMAGE */}
-          <div className="relative h-[420px] w-full rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800">
+          <div className="relative h-105 w-full rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800">
             <Image
               src={product.image}
               alt={product.title}
