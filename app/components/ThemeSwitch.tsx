@@ -17,7 +17,7 @@ export default function ThemeSwitch() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="
         relative w-12 h-7 rounded-full
-        bg-gray-200 dark:bg-gray-700
+        bg-[#0F8F8C] dark:bg-gray-700
         transition-colors duration-300
         flex items-center
         hover:bg-gray-300 dark:hover:bg-gray-600

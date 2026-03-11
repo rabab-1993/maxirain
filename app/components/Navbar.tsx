@@ -63,7 +63,7 @@ export default function Navbar() {
         fixed top-0 w-full z-50 transition-all duration-300 dark:text-slate-200
         ${
           scrolled
-            ? "bg-white/90 dark:bg-blue-950/90 backdrop-blur shadow-sm"
+            ? "bg-[#E6C8A6] dark:bg-blue-950/90 backdrop-blur shadow-sm"
             : "bg-transparent"
         }
       `}
@@ -73,23 +73,23 @@ export default function Navbar() {
   max-w-7xl mx-auto px-6 h-16 flex items-center justify-between
   ${
     scrolled
-      ? "text-blue-900 dark:text-blue-100"
+      ? "text-teal-800 dark:text-blue-100"
       : pathname === "/about"
         ? "text-slate-200"
-        : "text-blue-900 dark:text-blue-100"
+        : "text-teal-800 dark:text-blue-100"
   }
 `}
       >
         {/* LOGO */}
         <Link
           href="/"
-          className={`text-xl font-semibold text-blue-900 dark:text-blue-100
+          className={`text-xl font-semibold text-teal-800 dark:text-blue-100
  ${
    scrolled
-     ? "text-blue-900 dark:text-blue-100"
+     ? "text-teal-800 dark:text-blue-100"
      : pathname === "/about"
        ? "text-slate-200"
-       : "text-blue-900 dark:text-blue-100"
+       : "text-teal-800 dark:text-blue-100"
  }`}
         >
           Maxirain

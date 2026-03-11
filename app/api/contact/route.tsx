@@ -69,7 +69,6 @@ export async function POST(req: Request) {
     });
 
     if (error) {
-      console.log("RESEND RESULT:", error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
