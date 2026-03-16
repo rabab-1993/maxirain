@@ -3,7 +3,7 @@
 import { FaLinkedin, FaSquareXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import { useState } from "react";
-import InputField, { FormFields } from "../components/InputField";
+import InputField, { FormFields } from "../../components/InputField";
 
 export default function ContactPage() {
   const [form, setForm] = useState<FormFields>({

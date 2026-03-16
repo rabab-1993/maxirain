@@ -1,20 +1,26 @@
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-
+import Providers from "../(site)/providers";
+import "../globals.css";
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex">
-      <Sidebar />
+    <html lang="en" className="dark">
+      <body
+      // className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+      >
+        <Providers>
+          <div className="flex">
+            <Sidebar />
 
-      <div className="flex-1">
-        <Navbar />
-
-        <div className="p-6">{children}</div>
-      </div>
-    </div>
+            <div className="flex-1">
+              <div className="p-6">{children}</div>
+            </div>
+          </div>
+        </Providers>
+      </body>
+    </html>
   );
 }

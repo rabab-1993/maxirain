@@ -1,17 +1,20 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Sidebar() {
   return (
-    <div className="w-64 bg-[#0F8F8C] text-white h-screen p-6">
-      <h1 className="text-xl font-bold mb-10">Maxirain Admin</h1>
+    <div className="w-60 bg-[#E6C8A6] text-white h-screen p-5">
+      <h2 className="text-xl font-bold mb-6">Admin</h2>
 
-      <nav className="space-y-4">
-        <Link href="/dashboard">Dashboard</Link>
+      <div className="flex flex-col gap-3">
+        <Link href="/">Home</Link>
+        <Link href="/admin">Dashboard</Link>
 
         <Link href="/admin/products">Products</Link>
 
         <Link href="/admin/categories">Categories</Link>
-      </nav>
+      </div>
     </div>
   );
 }

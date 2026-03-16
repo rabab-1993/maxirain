@@ -5,7 +5,10 @@ export function proxy(req: NextRequest) {
 
   const isLoginPage = req.nextUrl.pathname.startsWith("/login");
 
-  const token = req.cookies.get("sb-access-token");
+  const token = req.cookies.getAll();
+  // const token = req.cookies.get("access_token");
+  // console.log(token);
+  
 
   if (!token && !isLoginPage) {
     return NextResponse.redirect(new URL("/login", req.url));
