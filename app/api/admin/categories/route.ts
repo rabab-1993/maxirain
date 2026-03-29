@@ -1,30 +1,3 @@
-// import  prisma  from "@/lib/prisma"
-// import { NextResponse } from "next/server"
-
-// export async function GET() {
-//   const categories = await prisma.category.findMany({
-//     include: {
-//       products: true
-//     }
-//   })
-
-//   return NextResponse.json(categories)
-// }
-
-// export async function POST(req: Request) {
-//   const body = await req.json()
-
-//   const category = await prisma.category.create({
-//     data: {
-//       name: body.name,
-//       slug: body.slug
-//     }
-//   })
-
-//   return NextResponse.json(category)
-// }
-
-
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
@@ -49,35 +22,31 @@ export async function POST(req: Request) {
   const description = formData.get("description") as string;
   const image = formData.get("image") as File;
 
-
   let imageUrl = "";
 
-  if (image) {
-    const fileName = Date.now() + "-" + image.name;
+  if (image && image.size > 0) {
+    const cleanName = image.name.replace(/\s/g, "-");
+    const fileName = `${Date.now()}-${cleanName}`;
 
+    const { error } = await supabase.storage
+      .from("categories")
+      .upload(fileName, image);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 
     const { data } = supabase.storage
       .from("categories")
-      .getPublicUrl(fileName)
-      // .getPublicUrl(`${name}/${fileName}`)
+      .getPublicUrl(fileName);
 
-
-    // console.log("error:", error);
-    // if (error) {
-
-    //   return NextResponse.json({ error: error.message }, { status: 500 });
-    // }
-
-    imageUrl = data.publicUrl
-    
-
-
+    imageUrl = data.publicUrl;
   }
 
   const category = await prisma.category.create({
     data: {
       name,
-      slug: name.toLowerCase(),
+      slug: name.toLowerCase().replace(/\s/g, "-"),
       description,
       imageUrl,
     },
@@ -85,7 +54,6 @@ export async function POST(req: Request) {
 
   return NextResponse.json(category);
 }
-
 export async function PUT(req: Request) {
   const formData = await req.formData();
 
