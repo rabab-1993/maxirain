@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const formData = await req.formData();
 
-  const id = formData.get("id") as unknown as number;
+  const id = Number(formData.get("id"));
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const image = formData.get("image") as File;
@@ -94,8 +94,38 @@ export async function PUT(req: Request) {
   return NextResponse.json(category);
 }
 
+
+
 export async function DELETE(req: Request) {
   const { id } = await req.json();
+
+  const category = await prisma.category.findUnique({
+    where: { id },
+  });
+
+  if (!category) {
+    return NextResponse.json({ error: "Category not found" }, { status: 404 });
+  }
+
+  if (category.imageUrl) {
+    try {
+      const url = new URL(category.imageUrl);
+
+      const fileName = url.pathname.split("/").pop();
+
+      if (fileName) {
+        const { error } = await supabase.storage
+          .from("categories")
+          .remove([fileName]);
+
+        if (error) {
+          console.error("Supabase delete error:", error.message);
+        }
+      }
+    } catch (err) {
+      console.error("Invalid image URL:", err);
+    }
+  }
 
   await prisma.category.delete({
     where: { id },
