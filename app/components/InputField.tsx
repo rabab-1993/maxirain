@@ -1,3 +1,10 @@
+export type Category = {
+  id: number;
+  name: string;
+  imageUrl?: string;
+  description: string;
+
+}
 export type FormFields = {
   name: string;
   email: string;
@@ -6,7 +13,7 @@ export type FormFields = {
 };
 
 type InputProps = {
-  name: keyof FormFields;
+  name: keyof (FormFields & Category);
   label: string;
   textarea?: boolean;
   value: string;

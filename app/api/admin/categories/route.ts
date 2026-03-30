@@ -24,17 +24,37 @@ export async function POST(req: Request) {
 
   let imageUrl = "";
 
-  if (image && image.size > 0) {
+  if (image) {
     const cleanName = image.name.replace(/\s/g, "-");
     const fileName = `${Date.now()}-${cleanName}`;
 
-    const { error } = await supabase.storage
+    // const { error } = await supabase.storage
+    //   .from("categories")
+    //   .upload(fileName, image);
+
+    // if (error) {
+    //   return NextResponse.json({ error: error.message }, { status: 500 });
+    // }
+
+    // const { data } = supabase.storage
+    //   .from("categories")
+    //   .getPublicUrl(fileName);
+
+    // imageUrl = data.publicUrl;
+
+
+
+
+    const { error: uploadError } = await supabase.storage
       .from("categories")
       .upload(fileName, image);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (uploadError) {
+      console.log("Supabase upload error:", uploadError);
+      throw uploadError
     }
+    
+    
 
     const { data } = supabase.storage
       .from("categories")
@@ -42,6 +62,7 @@ export async function POST(req: Request) {
 
     imageUrl = data.publicUrl;
   }
+
 
   const category = await prisma.category.create({
     data: {
@@ -81,6 +102,8 @@ export async function PUT(req: Request) {
 
 
   }
+
+
 
   const category = await prisma.category.update({
     where: { id },
