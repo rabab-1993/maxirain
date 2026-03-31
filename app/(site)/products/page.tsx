@@ -44,6 +44,8 @@ export default function ProductsPage() {
     },
   ];
 
+  
+
   return (
     <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
 

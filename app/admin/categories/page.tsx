@@ -264,7 +264,6 @@
 
 import InputField, { Category } from "@/app/components/InputField";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 
 export default function CategoriesDashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -321,10 +320,10 @@ export default function CategoriesDashboard() {
   };
 
   const fetchCategories = async () => {
-    const res = await fetch("/api/admin/categories");
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/categories");
     const data = await res.json();
     setCategories(data);
-    setLoading(false);
+    setLoading(false);    
   };
 
   useEffect(() => {
@@ -332,14 +331,19 @@ export default function CategoriesDashboard() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    await fetch("/api/admin/categories", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
+    try {
+      await fetch(process.env.NEXT_PUBLIC_API_URL + "/categories/", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
 
-    setCategories((prev) => prev.filter((c) => c.id !== id));
-    setOpenDelete(null);
+      setCategories((prev) => prev.filter((c) => c.id !== id));
+      setOpenDelete(null);
+      console.log("Category deleted successfully");
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
   };
 
   // ✅ Drag & Drop

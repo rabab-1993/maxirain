@@ -7,9 +7,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-      >
+    <html lang="en" suppressHydrationWarning>
+      
+      <body>
         <Providers>
           <div className="flex">
             <Sidebar />
