@@ -7,11 +7,10 @@ export async function GET() {
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      products: true,
-    },
+    // include: {
+    //   products: true,
+    // },
   });
-
   return NextResponse.json(categories);
 }
 
@@ -28,23 +27,7 @@ export async function POST(req: Request) {
     const cleanName = image.name.replace(/\s/g, "-");
     const fileName = `${Date.now()}-${cleanName}`;
 
-    // const { error } = await supabase.storage
-    //   .from("categories")
-    //   .upload(fileName, image);
-
-    // if (error) {
-    //   return NextResponse.json({ error: error.message }, { status: 500 });
-    // }
-
-    // const { data } = supabase.storage
-    //   .from("categories")
-    //   .getPublicUrl(fileName);
-
-    // imageUrl = data.publicUrl;
-
-
-
-
+    
     const { error: uploadError } = await supabase.storage
       .from("categories")
       .upload(fileName, image);
@@ -53,8 +36,8 @@ export async function POST(req: Request) {
       console.log("Supabase upload error:", uploadError);
       throw uploadError
     }
-    
-    
+
+
 
     const { data } = supabase.storage
       .from("categories")

@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import Providers from "../(site)/providers";
 import "../globals.css";
+import { CategoriesProvider } from "../context/CategoriesContext";
 export default function DashboardLayout({
   children,
 }: Readonly<{
@@ -8,16 +9,17 @@ export default function DashboardLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      
       <body>
         <Providers>
-          <div className="flex">
-            <Sidebar />
+          <CategoriesProvider>
+            <div className="flex">
+              <Sidebar />
 
-            <div className="flex-1">
-              <div className="p-6">{children}</div>
+              <div className="flex-1">
+                <div className="p-6">{children}</div>
+              </div>
             </div>
-          </div>
+          </CategoriesProvider>
         </Providers>
       </body>
     </html>

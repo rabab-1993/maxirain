@@ -7,7 +7,7 @@ export function proxy(req: NextRequest) {
 
   const token = req.cookies.getAll();
   // const token = req.cookies.get("access_token");
-  // console.log(token);
+  // console.log("token:", token);
   
 
   if (!token && !isLoginPage) {

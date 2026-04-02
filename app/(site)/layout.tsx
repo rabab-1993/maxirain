@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../../app/globals.css";
+import "../globals.css";
 import Providers from "./providers";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
-import { getCategories } from "@/lib/categories";
-import CategoryProvider from "./categories-provider";
+import { CategoriesProvider } from "@/app/context/CategoriesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,18 +26,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categoryPromise = getCategories();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
-          <CategoryProvider categoryPromise={categoryPromise}>
+          <CategoriesProvider>
             <Navbar />
             <main className="grow">{children}</main>
             <Footer />
-          </CategoryProvider>
+          </CategoriesProvider>
         </Providers>
       </body>
     </html>
