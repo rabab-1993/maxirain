@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
 
 export async function GET() {
   const categories = await prisma.category.findMany({
     orderBy: {
       createdAt: "desc",
     },
-    // include: {
-    //   products: true,
-    // },
+
   });
   return NextResponse.json(categories);
 }
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const cleanName = image.name.replace(/\s/g, "-");
     const fileName = `${Date.now()}-${cleanName}`;
 
-    
+
     const { error: uploadError } = await supabase.storage
       .from("categories")
       .upload(fileName, image);

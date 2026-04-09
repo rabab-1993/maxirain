@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/client";
 
 export default function ProductForm() {
   const [name, setName] = useState("");

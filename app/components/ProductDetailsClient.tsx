@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import MultipleProductsGallery from "./MultipleProductsGallery";
 
 type Category = {
   id: string;
@@ -8,41 +9,37 @@ type Category = {
   description?: string;
   imageUrl?: string;
   slug: string;
+  products?: [];
 };
 
 export default function ProductDetailsClient({
-  product,
+  category,
 }: {
-  product: Category;
+  category: Category;
 }) {
-  console.log("product:", product);
-  
+  console.log("category", category);
+
   return (
     <main className="h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-          
           <div className="relative h-105 w-full rounded-lg overflow-hidden border">
             <Image
-              src={product.imageUrl ?? "/empty.jpg"}
-              alt={product.name}
+              src={category?.imageUrl || "/empty.jpg"}
+              alt={category?.name || "image"}
               fill
               className="object-cover"
             />
           </div>
 
           <div>
-            <h1 className="text-4xl font-semibold mb-6">
-              {product.name}
-            </h1>
+            <h1 className="text-4xl font-semibold mb-6">{category?.name}</h1>
 
-            <p className="mb-10">
-              {product.description}
-            </p>
+            <p className="mb-10">{category?.description}</p>
           </div>
-
         </div>
       </section>
+      <MultipleProductsGallery products={category?.products || []} />
     </main>
   );
 }

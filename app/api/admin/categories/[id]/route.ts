@@ -6,7 +6,6 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    console.log("id:", id);
 
     const category = await prisma.category.findUnique({
         where: {
@@ -16,7 +15,6 @@ export async function GET(
             products: true,
         }
     });
-console.log("category",category);
 
     if (!category) {
         return NextResponse.json(

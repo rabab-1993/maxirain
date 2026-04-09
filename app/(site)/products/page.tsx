@@ -46,6 +46,7 @@ export default function ProductsPage() {
   ];
 
   const { categories } = useCategories();
+  
 
   return (
     <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
@@ -82,7 +83,7 @@ export default function ProductsPage() {
                 <div className="relative h-52 w-full">
                   <Image
                     // src="/empty.jpg"
-                    src={cat.imageUrl ?? "/empty.jpg"}
+                    src={cat?.imageUrl ?? "/empty.jpg"}
                     alt={cat.name}
                     fill
                     unoptimized

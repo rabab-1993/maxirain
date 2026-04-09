@@ -1,27 +1,23 @@
-"use client";
-
-import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import Sidebar from "@/app/components/Sidebar";
-
-export default function Admin() {
-  const router = useRouter();
-
-  const logout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
-
+export default function AdminDashboardPage() {
   return (
-    <div className="flex">
-      <div className="p-10">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <button
-          onClick={logout}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-slate-900">Dashboard</h2>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Total Products</p>
+          <p className="mt-2 text-3xl font-bold text-slate-900">--</p>
+        </div>
+
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Total Categories</p>
+          <p className="mt-2 text-3xl font-bold text-slate-900">--</p>
+        </div>
+
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Status</p>
+          <p className="mt-2 text-lg font-semibold text-teal-700">Ready</p>
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ export type Category = {
   name: string;
   imageUrl?: string;
   description: string;
+  createdAt: string;
 
 }
 export type FormFields = {

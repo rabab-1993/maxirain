@@ -18,13 +18,11 @@ export default async function ProductDetails({
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`,
-    { cache: "no-store" }
+    { cache: "no-store" },
   );
-  const data: Category[] = await res.json();
+  const data: Category = await res.json();
 
-  const product = data.find((p) => p.slug === slug);
+  if (!data) return notFound();
 
-  if (!product) return notFound();
-
-  return <ProductDetailsClient product={product} />;
+  return <ProductDetailsClient category={data} />;
 }
