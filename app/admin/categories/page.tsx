@@ -52,7 +52,7 @@ export default function CategoriesDashboard() {
       return;
     }
 
-    showToast(data.message || "Category deleted successfully", "success")
+    showToast(data.message || "Category deleted successfully", "success");
     mutateCategories();
     setOpen(false);
   };
@@ -99,7 +99,7 @@ export default function CategoriesDashboard() {
 
         <button
           onClick={() => setFormOpen(true)}
-          className="mt-6 inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800"
+          className="cursor-pointer mt-6 inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800"
         >
           + Add Category
         </button>
@@ -177,7 +177,7 @@ export default function CategoriesDashboard() {
                         <div className="flex flex-wrap items-center gap-2">
                           <button
                             onClick={() => handleOpenEdit(category)}
-                            className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                            className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
                           >
                             Edit
                           </button>
@@ -189,7 +189,7 @@ export default function CategoriesDashboard() {
                                 productsCount: category._count?.products || 0,
                               })
                             }
-                            className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                            className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
                             type="button"
                           >
                             Delete

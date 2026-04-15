@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/client";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ProductForm() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState<File | null>(null);
-
+const supabase = createClient();
   const createProduct = async () => {
     let imageUrl = "";
 

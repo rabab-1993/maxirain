@@ -2,20 +2,12 @@
 
 import Image from "next/image";
 import MultipleProductsGallery from "./MultipleProductsGallery";
-
-type Category = {
-  id: string;
-  name: string;
-  description?: string;
-  imageUrl?: string;
-  slug: string;
-  products?: [];
-};
+import { Category } from "../types/category";
 
 export default function ProductDetailsClient({
   category,
 }: {
-  category: Category;
+  category: Category | null;
 }) {
   return (
     <main className=" bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
@@ -37,9 +29,7 @@ export default function ProductDetailsClient({
           </div>
         </div>
       </section>
-      {/* <section className="py-20"> */}
       <MultipleProductsGallery products={category?.products || []} />
-      {/* </section> */}
     </main>
   );
 }

@@ -43,10 +43,9 @@ export default function AdminHeader({
           <p className="text-xs text-slate-500 sm:text-sm">Dashboard</p>
         </div>
       </div>
-
       <button
         onClick={handleLogout}
-        className="rounded-xl bg-red-500 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
+        className="cursor-pointer rounded-xl bg-red-500 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
       >
         Logout
       </button>
