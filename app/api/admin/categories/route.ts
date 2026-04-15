@@ -9,6 +9,12 @@ export async function GET() {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      products: true,
+      _count: {
+        select: { products: true }
+      }
+    }
 
   });
   return NextResponse.json(categories);
@@ -58,6 +64,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json(category);
 }
+
 export async function PUT(req: Request) {
   const formData = await req.formData();
 
@@ -92,6 +99,7 @@ export async function PUT(req: Request) {
     where: { id },
     data: {
       name,
+      slug: name.toLowerCase().replace(/\s/g, "-"),
       description,
       ...(imageUrl && { imageUrl: imageUrl }),
     },

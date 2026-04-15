@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useCategories } from "../../context/CategoriesContext";
+import { useCategories } from "@/app/hooks/useCategories";
 
 export default function ProductsPage() {
   const products = [
@@ -82,13 +82,12 @@ export default function ProductsPage() {
                 {/* IMAGE */}
                 <div className="relative h-52 w-full">
                   <Image
-                    // src="/empty.jpg"
                     src={cat?.imageUrl ?? "/empty.jpg"}
                     alt={cat.name}
                     fill
                     unoptimized
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
+                    className="object-fill"
                   />
                 </div>
 

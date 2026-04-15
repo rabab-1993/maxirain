@@ -46,13 +46,7 @@ export default function MultipleProductsGallery({
                     fill
                     className="object-cover transition duration-300 group-hover:scale-105"
                   />
-                  <span
-                    className={`absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-medium text-white ${
-                      product.isVisible ? "bg-green-600" : "bg-red-500"
-                    }`}
-                  >
-                    {product.isVisible ? "isVisible" : "Out of stock"}
-                  </span>
+             
                 </div>
 
                 <div className="p-4">
@@ -61,7 +55,7 @@ export default function MultipleProductsGallery({
                       {product.name}
                     </h3>
                     <span className="whitespace-nowrap text-sm font-bold text-indigo-600">
-                      ${product.price}
+                      SAR {product.price}
                     </span>
                   </div>
 
@@ -71,12 +65,12 @@ export default function MultipleProductsGallery({
                     </p>
                   )}
 
-                  <button
+                  {/* <button
                     className="mt-4 w-full rounded-xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
                     type="button"
                   >
                     View Product
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))}

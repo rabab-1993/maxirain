@@ -1,287 +1,16 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-
-// interface Product {
-//   id: number;
-//   name: string;
-//   price: number;
-//   description?: string;
-//   isVisible?: boolean;
-//   imageUrl?: string;
-//   categoryId?: number;
-// }
-
-// interface Category {
-//   id: number;
-//   name: string;
-// }
-
-// export default function ProductsDashboard() {
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [categories, setCategories] = useState<Category[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   const [formOpen, setFormOpen] = useState(false);
-//   const [editing, setEditing] = useState<Product | null>(null);
-//   const [deleteId, setDeleteId] = useState<number | null>(null);
-
-//   const [form, setForm] = useState({
-//     name: "",
-//     price: "",
-//     description: "",
-//     categoryId: "",
-//     isVisible: true,
-//     image: null as File | null,
-//   });
-
-//   const fetchData = async () => {
-//     const [pRes, cRes] = await Promise.all([
-//       fetch("/api/admin/products"),
-//       fetch("/api/admin/categories"),
-//     ]);
-
-//     const productsData = await pRes.json();
-//     const categoriesData = await cRes.json();
-
-//     setProducts(productsData);
-//     setCategories(categoriesData);
-//     setLoading(false);
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-
-//   const handleDelete = async (id: number) => {
-//     await fetch("/api/admin/products", {
-//       method: "DELETE",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ id }),
-//     });
-
-//     setProducts((prev) => prev.filter((p) => p.id !== id));
-//     setDeleteId(null);
-//   };
-
-//   if (loading) return <p className="p-6">Loading...</p>;
-
-//   return (
-//     <div className="p-6 space-y-6">
-//       <div className="flex justify-between">
-//         <h1 className="text-2xl font-bold">Products Dashboard</h1>
-//         <button
-//           onClick={() => setFormOpen(true)}
-//           className="bg-green-600 text-white px-4 py-2 rounded-xl"
-//         >
-//           + Add Product
-//         </button>
-//       </div>
-
-//       {/* Table */}
-//       <div className="bg-white rounded-2xl shadow overflow-hidden">
-//         <table className="w-full">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               <th className="p-3">Image</th>
-//               <th className="p-3">Name</th>
-//               <th className="p-3">Price</th>
-//               <th className="p-3">Description</th>
-//               <th className="p-3">Status</th>
-//               <th className="p-3">Category</th>
-//               <th className="p-3">Actions</th>
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {products.map((p) => (
-//               <tr key={p.id} className="border-t">
-//                 <td className="p-3">
-//                   {p.imageUrl && (
-//                     <img
-//                       src={p.imageUrl}
-//                       className="w-16 h-16 object-cover rounded"
-//                     />
-//                   )}
-//                 </td>
-//                 <td className="p-3">{p.name}</td>
-//                 <td className="p-3">${p.price}</td>
-//                 <td className="p-3 max-w-xs truncate">{p.description}</td>
-//                 <td className="p-3">
-//                   {p.isVisible ? (
-//                     <span className="text-green-600">Available</span>
-//                   ) : (
-//                     <span className="text-red-500">Out of stock</span>
-//                   )}
-//                 </td>
-//                 <td className="p-3">
-//                   {categories.find((c) => c.id === p.categoryId)?.name}
-//                 </td>
-//                 <td className="p-3 flex gap-2 justify-center">
-//                   <button
-//                     onClick={() => {
-//                       setEditing(p);
-//                       setForm({
-//                         name: p.name,
-//                         price: String(p.price),
-//                         description: p.description || "",
-//                         categoryId: String(p.categoryId || ""),
-//                         isVisible: p.isVisible ?? true,
-//                         image: null,
-//                       });
-//                       setFormOpen(true);
-//                     }}
-//                     className="bg-blue-500 text-white px-3 py-1 rounded"
-//                   >
-//                     Edit
-//                   </button>
-
-//                   <button
-//                     onClick={() => setDeleteId(p.id)}
-//                     className="bg-red-500 text-white px-3 py-1 rounded"
-//                   >
-//                     Delete
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//         {/* Delete Modal */}
-//         {deleteId && (
-//           <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-//             <div className="bg-white p-6 rounded-xl">
-//               <p className="mb-4">Confirm delete?</p>
-//               <div className="flex gap-2 justify-end">
-//                 <button onClick={() => setDeleteId(null)}>Cancel</button>
-//                 <button
-//                   onClick={() => handleDelete(deleteId)}
-//                   className="bg-red-500 text-white px-3 py-1 rounded"
-//                 >
-//                   Delete
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Form Modal */}
-//       {formOpen && (
-//         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-//           <div className="bg-white p-6 rounded-2xl w-100 space-y-4">
-//             <h2 className="text-xl font-bold">
-//               {editing ? "Edit Product" : "Add Product"}
-//             </h2>
-
-//             <input
-//               placeholder="Name"
-//               value={form.name}
-//               onChange={(e) => setForm({ ...form, name: e.target.value })}
-//               className="w-full border p-2 rounded"
-//             />
-
-//             <input
-//               type="number"
-//               placeholder="Price"
-//               value={form.price}
-//               onChange={(e) => setForm({ ...form, price: e.target.value })}
-//               className="w-full border p-2 rounded"
-//             />
-
-//             <textarea
-//               placeholder="Description"
-//               value={form.description}
-//               onChange={(e) =>
-//                 setForm({ ...form, description: e.target.value })
-//               }
-//               className="w-full border p-2 rounded"
-//             />
-
-//             <select
-//               value={form.categoryId}
-//               onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-//               className="w-full border p-2 rounded"
-//             >
-//               <option value="">Select Category</option>
-//               {categories.map((c) => (
-//                 <option key={c.id} value={c.id}>
-//                   {c.name}
-//                 </option>
-//               ))}
-//             </select>
-
-//             <label className="flex items-center gap-2">
-//               <input
-//                 type="checkbox"
-//                 checked={form.isVisible}
-//                 onChange={(e) =>
-//                   setForm({ ...form, isVisible: e.target.checked })
-//                 }
-//               />
-//               Product Available
-//             </label>
-
-//             <input
-//               type="file"
-//               onChange={(e) =>
-//                 setForm({ ...form, image: e.target.files?.[0] || null })
-//               }
-//             />
-
-//             <div className="flex justify-end gap-2">
-//               <button onClick={() => setFormOpen(false)}>Cancel</button>
-//               <button
-//                 onClick={handleSubmit}
-//                 className="bg-green-600 text-white px-4 py-2 rounded"
-//               >
-//                 Save
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
 "use client";
 
+import Toast from "@/app/components/Toast";
+import {
+  Product,
+  ProductFormErrors,
+  ProductFormState,
+} from "@/app/types/product";
 import { useEffect, useMemo, useState } from "react";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description?: string;
-  isVisible?: boolean;
-  imageUrl?: string;
-  categoryId?: number;
-  createdAt?: string;
-}
 
 interface Category {
   id: number;
   name: string;
-}
-
-interface ProductFormState {
-  name: string;
-  price: string;
-  description: string;
-  categoryId: string;
-  isVisible: boolean;
-  image: File | null;
-}
-
-interface ProductFormErrors {
-  name?: string;
-  price?: string;
-  description?: string;
-  categoryId?: string;
-  image?: string;
-  submit?: string;
 }
 
 const initialForm: ProductFormState = {
@@ -298,6 +27,7 @@ export default function ProductsDashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
@@ -308,17 +38,27 @@ export default function ProductsDashboard() {
   const [preview, setPreview] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
   const acceptedTypes = useMemo(
     () => ["image/jpeg", "image/png", "image/webp"],
     [],
   );
 
+  const showToast = (message: string, type: "success" | "error") => {
+    setToast({ message, type });
+
+    setTimeout(() => {
+      setToast(null);
+    }, 3000);
+  };
   const fetchData = async () => {
     try {
       const [pRes, cRes] = await Promise.all([
-        fetch("/api/admin/products"),
-        fetch("/api/admin/categories"),
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/products"),
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/categories"),
       ]);
 
       if (!pRes.ok || !cRes.ok) {
@@ -350,11 +90,11 @@ export default function ProductsDashboard() {
     const maxSize = 2 * 1024 * 1024;
 
     if (!acceptedTypes.includes(file.type)) {
-      return "نوع الصورة غير مدعوم. استخدم JPG أو PNG أو WEBP";
+      return "Unsupported image type. Please use JPG, PNG, or WEBP";
     }
 
     if (file.size > maxSize) {
-      return "حجم الصورة يجب ألا يتجاوز 2MB";
+      return "Image size must not exceed 2MB";
     }
 
     return "";
@@ -364,25 +104,25 @@ export default function ProductsDashboard() {
     const nextErrors: ProductFormErrors = {};
 
     if (!form.name.trim()) {
-      nextErrors.name = "اسم المنتج مطلوب";
+      nextErrors.name = "name is required";
     }
 
     if (!form.price.trim()) {
-      nextErrors.price = "السعر مطلوب";
+      nextErrors.price = "price is required";
     } else if (Number(form.price) <= 0) {
-      nextErrors.price = "السعر يجب أن يكون أكبر من صفر";
+      nextErrors.price = "price must be greater than zero";
     }
 
     if (!form.description.trim()) {
-      nextErrors.description = "وصف المنتج مطلوب";
+      nextErrors.description = "description is required";
     }
 
     if (!form.categoryId.trim()) {
-      nextErrors.categoryId = "اختر قسمًا للمنتج";
+      nextErrors.categoryId = "selecting a category is required";
     }
 
     if (!editing && !form.image) {
-      nextErrors.image = "صورة المنتج مطلوبة";
+      nextErrors.image = "product image is required";
     }
 
     return nextErrors;
@@ -464,92 +204,69 @@ export default function ProductsDashboard() {
         formData.append("id", String(editing.id));
       }
 
-      const res = await fetch("/api/admin/products", {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/products", {
         method,
         body: formData,
       });
 
       if (!res.ok) {
-        let message = editing ? "فشل تعديل المنتج" : "فشل إضافة المنتج";
+        let message = editing
+          ? "Failed to update product"
+          : "Failed to create product";
         try {
           const data = await res.json();
           message = data.error || message;
+          showToast(message, "error");
           console.log(message);
-          
         } catch {}
         throw new Error(message);
       }
-
+      showToast(
+        editing
+          ? "Product updated successfully"
+          : "Product created successfully",
+        "success",
+      );
       await fetchData();
       closeFormModal();
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        submit: error instanceof Error ? error.message : "حدث خطأ غير متوقع",
+        submit:
+          error instanceof Error ? error.message : "unexpected error occurred",
       }));
       console.log(error);
-      
     } finally {
       setSubmitting(false);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   const formData = new FormData();
-  //   formData.append("name", form.name);
-  //   formData.append("price", form.price);
-  //   formData.append("description", form.description);
-  //   formData.append("categoryId", form.categoryId);
-  //   formData.append("isVisible", String(form.isVisible));
-  //   if (form.image) formData.append("image", form.image);
-
-  //   const method = editing ? "PUT" : "POST";
-
-  //   if (editing) {
-  //     formData.append("id", String(editing.id));
-  //   }
-
-  //   await fetch("/api/admin/products", {
-  //     method,
-  //     body: formData,
-  //   });
-
-  //   setForm({
-  //     name: "",
-  //     price: "",
-  //     description: "",
-  //     categoryId: "",
-  //     isVisible: true,
-  //     image: null,
-  //   });
-  //   setEditing(null);
-  //   setFormOpen(false);
-  //   fetchData();
-  // };
-
-
   const handleDelete = async (id: number) => {
+    setDeleting(true);
     try {
-      const res = await fetch("/api/admin/products", {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/products", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
+        showToast(data.error || "Failed to delete product", "error");
+
         throw new Error("Delete failed");
       }
-
+      showToast(data.message || "Product deleted successfully", "success");
       setProducts((prev) => prev.filter((p) => p.id !== id));
       setDeleteId(null);
-    } catch {
-      alert("تعذر حذف المنتج");
+      setDeleting(false);
+    } catch (error) {
+      showToast("Failed to delete product", "error");
+      setDeleting(false);
     }
   };
 
   const totalProducts = products.length;
-  const visibleProducts = products.filter((p) => p.isVisible).length;
-  const hiddenProducts = products.filter((p) => !p.isVisible).length;
 
   if (loading) {
     return <p className="p-6 text-slate-500">Loading...</p>;
@@ -574,6 +291,8 @@ export default function ProductsDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Toast */}
+      {toast && <Toast message={toast.message} type={toast.type} />}
       {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
@@ -601,27 +320,13 @@ export default function ProductsDashboard() {
             {totalProducts}
           </p>
         </div>
-
-        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
-          <p className="text-sm text-slate-500">Available Products</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
-            {visibleProducts}
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-white p-5 shadow-sm sm:col-span-2 xl:col-span-1 sm:p-6">
-          <p className="text-sm text-slate-500">Out of Stock</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
-            {hiddenProducts}
-          </p>
-        </div>
       </div>
 
       {/* Desktop Table */}
       <div className="hidden overflow-hidden rounded-2xl bg-white shadow-sm lg:block">
         {products.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px]">
+            <table className="w-full min-w-245">
               <thead className="bg-slate-50">
                 <tr className="text-left text-sm text-slate-500">
                   <th className="px-4 py-4 font-medium">Image</th>
@@ -806,7 +511,7 @@ export default function ProductsDashboard() {
                 onClick={() => handleDelete(deleteId)}
                 className="w-full rounded-xl bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-600 sm:w-auto"
               >
-                Delete
+                {deleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
@@ -817,7 +522,7 @@ export default function ProductsDashboard() {
       {formOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 p-0 sm:p-4">
           <div className="flex min-h-full items-end justify-center sm:items-center">
-            <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-5xl sm:rounded-3xl">
+            <div className="flex h-dvh w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-5xl sm:rounded-3xl">
               <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-4 py-4 sm:px-6">
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
@@ -1097,61 +802,6 @@ export default function ProductsDashboard() {
                       </button>
                     </div>
                   </form>
-
-                  {/* <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
-                      <h4 className="text-lg font-semibold text-slate-900">
-                        Product Preview
-                      </h4>
-                      <p className="mt-1 text-sm text-slate-500">
-                        This is an approximate preview of how the product will
-                        appear
-                      </p>
-
-                      <div className="mt-5 overflow-hidden rounded-2xl border border-slate-100 bg-white">
-                        <div className="aspect-[4/3] bg-slate-100">
-                          {preview ? (
-                            <img
-                              src={preview}
-                              alt="Product preview"
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-sm text-slate-400">
-                              No image
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="p-4">
-                          <h4 className="text-base font-semibold text-slate-900">
-                            {form.name.trim() || "Product Name"}
-                          </h4>
-                          <p className="mt-1 text-sm font-medium text-slate-700">
-                            {form.price.trim() ? `${form.price} SAR` : "0 SAR"}
-                          </p>
-                          <p className="mt-2 line-clamp-3 text-sm text-slate-500">
-                            {form.description.trim() ||
-                              "The product description will appear here after writing it."}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
-                      <h4 className="text-lg font-semibold text-slate-900">
-                        Notes
-                      </h4>
-                      <ul className="mt-4 space-y-3 text-sm text-slate-500">
-                        <li>Use a short and clear product name.</li>
-                        <li>Prefer high quality product images.</li>
-                        <li>Make the description concise and useful.</li>
-                        <li>
-                          Choose the correct category for easier browsing.
-                        </li>
-                      </ul>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -1169,17 +819,6 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
         📦
       </div>
       <h3 className="text-lg font-semibold text-slate-900">No products yet</h3>
-      <p className="mt-2 max-w-md text-sm text-slate-500">
-        Start by adding your first product to organize your catalog inside the
-        dashboard.
-      </p>
-
-      <button
-        onClick={onAdd}
-        className="mt-6 inline-flex w-full max-w-xs items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800"
-      >
-        + Add First Product
-      </button>
     </div>
   );
 }

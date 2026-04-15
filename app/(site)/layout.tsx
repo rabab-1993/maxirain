@@ -4,7 +4,6 @@ import "../globals.css";
 import Providers from "./providers";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
-import { CategoriesProvider } from "@/app/context/CategoriesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Providers>
-          <CategoriesProvider>
             <Navbar />
             <main className="grow">{children}</main>
             <Footer />
-          </CategoriesProvider>
         </Providers>
       </body>
     </html>

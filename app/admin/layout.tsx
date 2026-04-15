@@ -1,16 +1,11 @@
 "use client";
 import type { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
 import Providers from "../(site)/providers";
 import "../globals.css";
-import { CategoriesProvider } from "../context/CategoriesContext";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminHeader from "../components/admin/AdminHeader";
 import { useState } from "react";
-// export const metadata: Metadata = {
-//   title: "Maxirain | Smart Water Management",
-//   description: "Innovative irrigation and water-efficient technologies",
-// };
+
 
 export default function DashboardLayout({
   children,
@@ -21,9 +16,14 @@ export default function DashboardLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Maxirain Admin Dashboard</title>
+        {/* <link rel="icon" type="image/x-icon" href="/favicon.ico" /> */}
+      </head>
       <body>
         <Providers>
-          <CategoriesProvider>
             <div className="min-h-screen bg-slate-50">
               <div className="flex min-h-screen">
                 <AdminSidebar
@@ -37,7 +37,6 @@ export default function DashboardLayout({
                 </div>
               </div>
             </div>
-          </CategoriesProvider>
         </Providers>
       </body>
     </html>

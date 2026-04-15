@@ -17,18 +17,16 @@ export default function ProductDetailsClient({
 }: {
   category: Category;
 }) {
-  console.log("category", category);
-
   return (
-    <main className="h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+    <main className=" bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div className="relative h-105 w-full rounded-lg overflow-hidden border">
             <Image
               src={category?.imageUrl || "/empty.jpg"}
               alt={category?.name || "image"}
-              fill
-              className="object-cover"
+              fill={true}
+              className="object-fill"
             />
           </div>
 
@@ -39,7 +37,9 @@ export default function ProductDetailsClient({
           </div>
         </div>
       </section>
+      {/* <section className="py-20"> */}
       <MultipleProductsGallery products={category?.products || []} />
+      {/* </section> */}
     </main>
   );
 }
