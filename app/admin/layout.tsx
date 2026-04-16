@@ -1,11 +1,9 @@
 "use client";
-import type { Metadata } from "next";
 import Providers from "../(site)/providers";
 import "../globals.css";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminHeader from "../components/admin/AdminHeader";
 import { useState } from "react";
-
 
 export default function DashboardLayout({
   children,
@@ -24,19 +22,19 @@ export default function DashboardLayout({
       </head>
       <body>
         <Providers>
-            <div className="min-h-screen bg-slate-50">
-              <div className="flex min-h-screen">
-                <AdminSidebar
-                  open={sidebarOpen}
-                  onClose={() => setSidebarOpen(false)}
-                />
+          <div className="min-h-screen bg-slate-50 dark:bg-[#085E5A]">
+            <div className="flex min-h-screen">
+              <AdminSidebar
+                open={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+              />
 
-                <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-                  <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
-                  <main className="flex-1 p-4 sm:p-6">{children}</main>
-                </div>
+              <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+                <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
+                <main className="flex-1 p-4 sm:p-6">{children}</main>
               </div>
             </div>
+          </div>
         </Providers>
       </body>
     </html>

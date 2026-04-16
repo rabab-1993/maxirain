@@ -90,8 +90,8 @@ export default function CategoriesDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Categories</h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">Categories</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             Manage your product categories and display them in an organized
             manner within the site
           </p>
@@ -99,7 +99,7 @@ export default function CategoriesDashboard() {
 
         <button
           onClick={() => setFormOpen(true)}
-          className="cursor-pointer mt-6 inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800"
+          className="cursor-pointer mt-6 inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800 dark:bg-teal-500 dark:hover:bg-teal-600"
         >
           + Add Category
         </button>
@@ -107,21 +107,21 @@ export default function CategoriesDashboard() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Total Categories</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
+        <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#0e514c]">
+          <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">Total Categories</p>
+          <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-[#F5E1D0]">
             {totalCategories}
           </p>
         </div>
       </div>
 
       {/* Table / Empty State */}
-      <div className=" overflow-hidden rounded-2xl bg-white shadow-sm lg:block ">
+      <div className=" overflow-hidden rounded-2xl bg-white shadow-sm lg:block dark:bg-[#0e514c]">
         {categories && categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-245">
-              <thead className="bg-slate-50">
-                <tr className="text-left text-sm text-slate-500">
+              <thead className="bg-slate-50 dark:bg-[#0e514c]">
+                <tr className="text-left text-sm text-slate-500 dark:text-[#fdd3ad]">
                   <th className="px-4 py-4 font-medium">Image</th>
                   <th className="px-4 py-4 font-medium">Name</th>
                   <th className="px-4 py-4 font-medium">Description</th>
@@ -137,35 +137,35 @@ export default function CategoriesDashboard() {
                   return (
                     <tr
                       key={category.id}
-                      className="border-t border-slate-100 transition hover:bg-slate-50/70"
+                      className="border-t border-slate-100 transition hover:bg-slate-50/70 dark:border-[#012926] dark:hover:bg-[#058078]/70"
                     >
                       <td className="px-4 py-4">
                         {imageSrc ? (
                           <img
                             src={imageSrc}
                             alt={category.name}
-                            className="h-14 w-14 rounded-xl object-cover ring-1 ring-slate-200"
+                            className="h-14 w-14 rounded-xl object-cover ring-1 ring-slate-200 dark:ring-[#012926]"
                           />
                         ) : (
-                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-slate-100 text-xs text-slate-400">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-slate-100 text-xs text-slate-400 dark:bg-[#0e514c] dark:text-[#fdd3ad]">
                             No Image
                           </div>
                         )}
                       </td>
 
                       <td className="px-4 py-4">
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-slate-900 dark:text-[#F5E1D0]">
                           {category.name}
                         </div>
                       </td>
 
-                      <td className="px-4 py-4 text-sm text-slate-600">
+                      <td className="px-4 py-4 text-sm text-slate-600 dark:text-[#fdd3ad]">
                         <div className="max-w-md line-clamp-2">
                           {category.description || "-"}
                         </div>
                       </td>
 
-                      <td className="px-4 py-4 text-sm text-slate-500">
+                      <td className="px-4 py-4 text-sm text-slate-500 dark:text-[#fdd3ad]">
                         {category.createdAt
                           ? new Date(category.createdAt).toLocaleDateString(
                               "ar-SA",

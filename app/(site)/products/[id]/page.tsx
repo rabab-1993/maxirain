@@ -2,14 +2,6 @@ import { notFound } from "next/navigation";
 import ProductDetailsClient from "@/app/components/ProductDetailsClient";
 import type { Category } from "@/app/types/category";
 
-// type Category = {
-//   id: string;
-//   name: string;
-//   description?: string;
-//   imageUrl?: string;
-//   slug: string;
-// };
-
 export default async function ProductDetails({
   params,
 }: {

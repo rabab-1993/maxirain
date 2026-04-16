@@ -175,18 +175,18 @@ export default function CategoryModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 p-0 sm:p-4">
       <div className="flex min-h-full items-center justify-center sm:items-center">
-        <div className="flex h-dvh w-screen flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:rounded-3xl">
-          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 sm:px-6">
+        <div className="flex h-dvh w-screen flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:rounded-3xl dark:bg-[#085E5A]">
+          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 sm:px-6 dark:border-[#012926]">
             <div>
-              <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
+              <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#F5E1D0]">
                 {isEditMode ? "Edit Category" : "Create New Category"}
               </h3>
             </div>
 
             <button
               onClick={handleClose}
-              className="shrink-0 rounded-xl px-3 py-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
               type="button"
+              className="text-slate-500 hover:text-slate-700 dark:text-[#fdd3ad] dark:hover:text-[#F5E1D0]"
             >
               ✕
             </button>
@@ -196,7 +196,7 @@ export default function CategoryModal({
             <div className="flex h-full flex-col px-4 py-6 sm:px-6">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
                     Category Name
                   </label>
                   <input
@@ -209,10 +209,10 @@ export default function CategoryModal({
                       }
                     }}
                     placeholder="Category Name"
-                    className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                    className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
                       errors.name
                         ? "border-red-300 focus:border-red-400"
-                        : "border-slate-200 focus:border-teal-600"
+                        : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
                     }`}
                   />
                   {errors.name && (
@@ -221,7 +221,7 @@ export default function CategoryModal({
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
                     Description
                   </label>
                   <textarea
@@ -237,10 +237,10 @@ export default function CategoryModal({
                     }}
                     placeholder="Describe the category"
                     rows={5}
-                    className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                    className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
                       errors.description
                         ? "border-red-300 focus:border-red-400"
-                        : "border-slate-200 focus:border-teal-600"
+                        : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
                     }`}
                   />
                   {errors.description && (
@@ -251,7 +251,7 @@ export default function CategoryModal({
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
                     Category Image
                   </label>
 
@@ -269,10 +269,10 @@ export default function CategoryModal({
                     onDragLeave={() => setDragActive(false)}
                     className={`rounded-2xl border-2 border-dashed p-6 text-center transition ${
                       dragActive
-                        ? "border-teal-600 bg-teal-50"
+                        ? "border-teal-600 bg-teal-50 dark:border-teal-400 dark:bg-teal-900/30"
                         : errors.image
                           ? "border-red-300 bg-red-50/40"
-                          : "border-slate-300 bg-slate-50"
+                          : "border-slate-300 bg-slate-50 dark:border-[#012926] dark:bg-[#0e514c] "
                     }`}
                   >
                     <input
@@ -285,21 +285,21 @@ export default function CategoryModal({
                       className="hidden"
                     />
 
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm dark:bg-[#012926] dark:text-[#fdd3ad]">
                       🖼️
                     </div>
 
-                    <p className="mt-4 text-sm font-medium text-slate-700">
+                    <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
                       Drag & drop your image here, or click to select a file
                     </p>
 
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-slate-500 dark:text-[#fdd3ad]">
                       JPG / PNG / WEBP — max size 2MB
                     </p>
 
                     <label
                       htmlFor="category-image-modal"
-                      className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+                      className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]"
                     >
                       choose Image
                     </label>
@@ -309,7 +309,7 @@ export default function CategoryModal({
                         <img
                           src={preview}
                           alt="Preview"
-                          className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200"
+                          className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200 dark:ring-[#012926]"
                         />
                       </div>
                     )}
@@ -329,7 +329,7 @@ export default function CategoryModal({
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                   >
                     Cancel
                   </button>
@@ -337,7 +337,7 @@ export default function CategoryModal({
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:hover:bg-teal-600 dark:disabled:bg-teal-400"
                   >
                     {submitting
                       ? isEditMode
