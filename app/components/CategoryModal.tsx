@@ -14,8 +14,13 @@ type FormErrors = {
 type CategoryModalProps = {
   open: boolean;
   onClose: () => void;
-  onSaved?: (category: Category) => void;
+  onSaved?: (
+    category: Category,
+    massagedCategory: string,
+    status: "success" | "error",
+  ) => void;
   category?: Category | null;
+  massagedCategory?: string;
 };
 
 export default function CategoryModal({
@@ -33,7 +38,6 @@ export default function CategoryModal({
   const [dragActive, setDragActive] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-
   const { mutateCategories } = useCategories();
 
   const acceptedTypes = useMemo(
@@ -145,22 +149,27 @@ export default function CategoryModal({
       });
 
       const data = await res.json();
-
+      let massagedCategory;
       if (!res.ok) {
-        throw new Error(
+        massagedCategory =
           data?.error ||
-            (isEditMode
-              ? "Failed to update category"
-              : "Failed to create category"),
-        );
-      }
+          (isEditMode
+            ? "Failed to update category"
+            : "Failed to create category");
+            }
 
       await mutateCategories();
-
+      if (res.ok) {
+        massagedCategory =
+          data?.message ||
+          (isEditMode
+            ? "Category updated successfully"
+            : "Category created successfully");
+      }
       const savedCategory: Category =
         data.category ?? data.updatedCategory ?? data;
 
-      onSaved?.(savedCategory);
+      onSaved?.(savedCategory, massagedCategory, res.ok ? "success" : "error");
       handleClose();
     } catch (error) {
       setErrors((prev) => ({
@@ -173,186 +182,190 @@ export default function CategoryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 p-0 sm:p-4">
-      <div className="flex min-h-full items-center justify-center sm:items-center">
-        <div className="flex h-dvh w-screen flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:rounded-3xl dark:bg-[#085E5A]">
-          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 sm:px-6 dark:border-[#012926]">
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#F5E1D0]">
-                {isEditMode ? "Edit Category" : "Create New Category"}
-              </h3>
+    <>
+      <div className="fixed inset-0 z-50 bg-black/50 p-0 sm:p-4">
+        <div className="flex min-h-full items-center justify-center sm:items-center">
+          <div className="flex h-dvh w-screen flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:rounded-3xl dark:bg-[#085E5A]">
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 sm:px-6 dark:border-[#012926]">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#F5E1D0]">
+                  {isEditMode ? "Edit Category" : "Create New Category"}
+                </h3>
+              </div>
+
+              <button
+                onClick={handleClose}
+                type="button"
+                className="cursor-pointer text-slate-500 hover:text-slate-700 dark:text-[#fdd3ad] dark:hover:text-[#F5E1D0]"
+              >
+                ✕
+              </button>
             </div>
 
-            <button
-              onClick={handleClose}
-              type="button"
-              className="text-slate-500 hover:text-slate-700 dark:text-[#fdd3ad] dark:hover:text-[#F5E1D0]"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            <div className="flex h-full flex-col px-4 py-6 sm:px-6">
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                    Category Name
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      if (errors.name) {
-                        setErrors((prev) => ({ ...prev, name: undefined }));
-                      }
-                    }}
-                    placeholder="Category Name"
-                    className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
-                      errors.name
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
-                    }`}
-                  />
-                  {errors.name && (
-                    <p className="mt-2 text-sm text-red-500">{errors.name}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                    Description
-                  </label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => {
-                      setDescription(e.target.value);
-                      if (errors.description) {
-                        setErrors((prev) => ({
-                          ...prev,
-                          description: undefined,
-                        }));
-                      }
-                    }}
-                    placeholder="Describe the category"
-                    rows={5}
-                    className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
-                      errors.description
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
-                    }`}
-                  />
-                  {errors.description && (
-                    <p className="mt-2 text-sm text-red-500">
-                      {errors.description}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                    Category Image
-                  </label>
-
-                  <div
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      setDragActive(false);
-                      const file = e.dataTransfer.files?.[0] ?? null;
-                      handleSetImage(file);
-                    }}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      setDragActive(true);
-                    }}
-                    onDragLeave={() => setDragActive(false)}
-                    className={`rounded-2xl border-2 border-dashed p-6 text-center transition ${
-                      dragActive
-                        ? "border-teal-600 bg-teal-50 dark:border-teal-400 dark:bg-teal-900/30"
-                        : errors.image
-                          ? "border-red-300 bg-red-50/40"
-                          : "border-slate-300 bg-slate-50 dark:border-[#012926] dark:bg-[#0e514c] "
-                    }`}
-                  >
-                    <input
-                      id="category-image-modal"
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp"
-                      onChange={(e) =>
-                        handleSetImage(e.target.files?.[0] ?? null)
-                      }
-                      className="hidden"
-                    />
-
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm dark:bg-[#012926] dark:text-[#fdd3ad]">
-                      🖼️
-                    </div>
-
-                    <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                      Drag & drop your image here, or click to select a file
-                    </p>
-
-                    <p className="mt-1 text-xs text-slate-500 dark:text-[#fdd3ad]">
-                      JPG / PNG / WEBP — max size 2MB
-                    </p>
-
-                    <label
-                      htmlFor="category-image-modal"
-                      className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]"
-                    >
-                      choose Image
+            <div className="flex-1 overflow-y-auto">
+              <div className="flex h-full flex-col px-4 py-6 sm:px-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
+                      Category Name
                     </label>
-
-                    {preview && (
-                      <div className="mt-5">
-                        <img
-                          src={preview}
-                          alt="Preview"
-                          className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200 dark:ring-[#012926]"
-                        />
-                      </div>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (errors.name) {
+                          setErrors((prev) => ({ ...prev, name: undefined }));
+                        }
+                      }}
+                      placeholder="Category Name"
+                      className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
+                        errors.name
+                          ? "border-red-300 focus:border-red-400"
+                          : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
+                      }`}
+                    />
+                    {errors.name && (
+                      <p className="mt-2 text-sm text-red-500">{errors.name}</p>
                     )}
                   </div>
 
-                  {errors.image && (
-                    <p className="mt-2 text-sm text-red-500">{errors.image}</p>
-                  )}
-                </div>
-                {errors.submit && (
-                  <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
-                    {errors.submit}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
+                      Description
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                        if (errors.description) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            description: undefined,
+                          }));
+                        }
+                      }}
+                      placeholder="Describe the category"
+                      rows={5}
+                      className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
+                        errors.description
+                          ? "border-red-300 focus:border-red-400"
+                          : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-teal-400"
+                      }`}
+                    />
+                    {errors.description && (
+                      <p className="mt-2 text-sm text-red-500">
+                        {errors.description}
+                      </p>
+                    )}
                   </div>
-                )}
 
-                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
-                  >
-                    Cancel
-                  </button>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
+                      Category Image
+                    </label>
 
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:hover:bg-teal-600 dark:disabled:bg-teal-400"
-                  >
-                    {submitting
-                      ? isEditMode
-                        ? "Updating..."
-                        : "Creating..."
-                      : isEditMode
-                        ? "Update Category"
-                        : "Create Category"}
-                  </button>
-                </div>
-              </form>
+                    <div
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setDragActive(false);
+                        const file = e.dataTransfer.files?.[0] ?? null;
+                        handleSetImage(file);
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setDragActive(true);
+                      }}
+                      onDragLeave={() => setDragActive(false)}
+                      className={`rounded-2xl border-2 border-dashed p-6 text-center transition ${
+                        dragActive
+                          ? "border-teal-600 bg-teal-50 dark:border-teal-400 dark:bg-teal-900/30"
+                          : errors.image
+                            ? "border-red-300 bg-red-50/40"
+                            : "border-slate-300 bg-slate-50 dark:border-[#012926] dark:bg-[#0e514c]"
+                      }`}
+                    >
+                      <input
+                        id="category-image-modal"
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={(e) =>
+                          handleSetImage(e.target.files?.[0] ?? null)
+                        }
+                        className="hidden"
+                      />
+
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm dark:bg-[#012926] dark:text-[#fdd3ad]">
+                        🖼️
+                      </div>
+
+                      <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
+                        Drag & drop your image here, or click to select a file
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-500 dark:text-[#fdd3ad]">
+                        JPG / PNG / WEBP — max size 2MB
+                      </p>
+
+                      <label
+                        htmlFor="category-image-modal"
+                        className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]"
+                      >
+                        choose Image
+                      </label>
+
+                      {preview && (
+                        <div className="mt-5">
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200 dark:ring-[#012926]"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {errors.image && (
+                      <p className="mt-2 text-sm text-red-500">
+                        {errors.image}
+                      </p>
+                    )}
+                  </div>
+                  {errors.submit && (
+                    <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
+                      {errors.submit}
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="cursor-pointer rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="cursor-pointer rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:hover:bg-teal-600 dark:disabled:bg-teal-400"
+                    >
+                      {submitting
+                        ? isEditMode
+                          ? "Updating..."
+                          : "Creating..."
+                        : isEditMode
+                          ? "Update Category"
+                          : "Create Category"}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

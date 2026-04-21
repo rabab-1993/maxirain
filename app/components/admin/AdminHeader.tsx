@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Menu } from "lucide-react";
+import ThemeSwitch from "../ThemeSwitch";
 
 export default function AdminHeader({
   onMenuClick,
@@ -25,11 +26,11 @@ export default function AdminHeader({
   };
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur sm:px-6">
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur sm:px-6 dark:bg-teal-900/95 dark:border-[#F5E1D0]">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700 transition hover:bg-slate-50 md:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700 transition hover:bg-slate-50 md:hidden dark:border-[#F5E1D0] dark:text-[#F5E1D0] dark:hover:bg-[#fec899]/10"
           type="button"
           aria-label="Open menu"
         >
@@ -37,18 +38,33 @@ export default function AdminHeader({
         </button>
 
         <div>
-          <h1 className="text-lg font-bold text-slate-900 sm:text-xl">
+          <h1 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#fec899]">
             Maxirain Admin
           </h1>
-          <p className="text-xs text-slate-500 sm:text-sm">Dashboard</p>
+          <p className="text-xs text-slate-500 sm:text-sm dark:text-[#F5E1D0]">
+            Dashboard
+          </p>
         </div>
       </div>
-      <button
-        onClick={handleLogout}
-        className="cursor-pointer rounded-xl bg-red-500 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
-      >
-        Logout
-      </button>
+      <div className="hidden md:flex items-center gap-4">
+        <ThemeSwitch />
+        <button
+          onClick={handleLogout}
+          className="cursor-pointer rounded-xl bg-red-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
+        >
+          Logout
+        </button>
+      </div>
+      {/* Mobile Controls */}
+      <div className="flex items-center gap-2 md:hidden">
+        <ThemeSwitch />
+        <button
+          onClick={handleLogout}
+          className="cursor-pointer rounded-xl bg-red-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
+        >
+          Logout
+        </button>
+      </div>
     </header>
   );
 }

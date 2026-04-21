@@ -269,15 +269,17 @@ export default function ProductsDashboard() {
   const totalProducts = products.length;
 
   if (loading) {
-    return <p className="p-6 text-slate-500">Loading...</p>;
+    return <p className="p-6 text-slate-500 dark:text-[#fdd3ad]">Loading...</p>;
   }
 
   if (error) {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Products</h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
+            Products
+          </h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             Manage your products and organize their display inside the store
           </p>
         </div>
@@ -296,10 +298,10 @@ export default function ProductsDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-[#F5E1D0]">
             Products
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             Manage your products and display them in a clean and organized way
           </p>
         </div>
@@ -314,21 +316,23 @@ export default function ProductsDashboard() {
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6">
-          <p className="text-sm text-slate-500">Total Products</p>
-          <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
+        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6 dark:bg-[#0e514c]">
+          <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">
+            Total Products
+          </p>
+          <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-[#F5E1D0]">
             {totalProducts}
           </p>
         </div>
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden overflow-hidden rounded-2xl bg-white shadow-sm lg:block">
+      <div className="hidden overflow-hidden rounded-2xl bg-white shadow-sm lg:block dark:bg-[#0e514c]">
         {products.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-245">
-              <thead className="bg-slate-50">
-                <tr className="text-left text-sm text-slate-500">
+              <thead className="bg-slate-50 dark:bg-[#0e514c]">
+                <tr className="text-left text-sm text-slate-500 dark:text-[#fdd3ad]">
                   <th className="px-4 py-4 font-medium">Image</th>
                   <th className="px-4 py-4 font-medium">Name</th>
                   <th className="px-4 py-4 font-medium">Price</th>
@@ -343,7 +347,7 @@ export default function ProductsDashboard() {
                 {products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-t border-slate-100 transition hover:bg-slate-50/70"
+                    className="border-t border-slate-100 transition hover:bg-slate-50/70 dark:border-[#012926] dark:hover:bg-[#058078]/70"
                   >
                     <td className="px-4 py-4">
                       {product.imageUrl ? (
@@ -359,15 +363,15 @@ export default function ProductsDashboard() {
                       )}
                     </td>
 
-                    <td className="px-4 py-4 font-semibold text-slate-900">
+                    <td className="px-4 py-4 font-semibold text-slate-900 dark:text-[#F5E1D0]">
                       {product.name}
                     </td>
 
-                    <td className="px-4 py-4 text-sm font-medium text-slate-700">
+                    <td className="px-4 py-4 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                       {product.price} SAR
                     </td>
 
-                    <td className="px-4 py-4 text-sm text-slate-600">
+                    <td className="px-4 py-4 text-sm text-slate-600 dark:text-[#F5E1D0]">
                       <div className="max-w-xs line-clamp-2">
                         {product.description || "-"}
                       </div>
@@ -375,17 +379,17 @@ export default function ProductsDashboard() {
 
                     <td className="px-4 py-4">
                       {product.isVisible ? (
-                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-700 dark:text-green-100">
                           Available
                         </span>
                       ) : (
-                        <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                        <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-800 dark:text-red-100">
                           Out of stock
                         </span>
                       )}
                     </td>
 
-                    <td className="px-4 py-4 text-sm text-slate-600">
+                    <td className="px-4 py-4 text-sm text-slate-600 dark:text-[#F5E1D0]">
                       {getCategoryName(product.categoryId)}
                     </td>
 
@@ -393,14 +397,14 @@ export default function ProductsDashboard() {
                       <div className="flex flex-wrap items-center gap-2">
                         <button
                           onClick={() => openEditModal(product)}
-                          className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                          className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
                         >
                           Edit
                         </button>
 
                         <button
                           onClick={() => setDeleteId(product.id)}
-                          className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                          className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
                         >
                           Delete
                         </button>
@@ -422,7 +426,7 @@ export default function ProductsDashboard() {
           products.map((product) => (
             <div
               key={product.id}
-              className="rounded-2xl bg-white p-4 shadow-sm sm:p-5"
+              className="rounded-2xl bg-white p-4 shadow-sm sm:p-5 dark:bg-[#0e514c]"
             >
               <div className="flex items-start gap-4">
                 {product.imageUrl ? (
@@ -438,30 +442,30 @@ export default function ProductsDashboard() {
                 )}
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-base font-bold text-slate-900">
+                  <h3 className="truncate text-base font-bold text-slate-900 dark:text-[#F5E1D0]">
                     {product.name}
                   </h3>
 
-                  <p className="mt-1 text-sm font-medium text-slate-700">
+                  <p className="mt-1 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                     {product.price} SAR
                   </p>
 
-                  <p className="mt-2 line-clamp-3 text-sm text-slate-500">
+                  <p className="mt-2 line-clamp-3 text-sm text-slate-500 dark:text-[#F5E1D0]">
                     {product.description || "-"}
                   </p>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     {product.isVisible ? (
-                      <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                      <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:text-green-100 dark:bg-green-700">
                         Available
                       </span>
                     ) : (
-                      <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                      <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:text-red-100 dark:bg-red-800">
                         Out of stock
                       </span>
                     )}
 
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-slate-400 dark:text-[#F5E1D0]">
                       {getCategoryName(product.categoryId)}
                     </span>
                   </div>
@@ -471,14 +475,14 @@ export default function ProductsDashboard() {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
                   onClick={() => openEditModal(product)}
-                  className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                  className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
                 >
                   Edit
                 </button>
 
                 <button
                   onClick={() => setDeleteId(product.id)}
-                  className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                  className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
                 >
                   Delete
                 </button>
@@ -493,23 +497,27 @@ export default function ProductsDashboard() {
       {/* Delete Modal */}
       {deleteId !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-slate-900">Delete Product</h3>
-            <p className="mt-2 text-sm text-slate-500">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#085E5A]">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-[#F5E1D0]">
+              Delete Product
+            </h3>
+            <p className="mt-2 text-sm text-slate-500 dark:text-[#F5E1D0]">
               Are you sure you want to delete this product?
             </p>
 
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => setDeleteId(null)}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium
+                 text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926] 
+                dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70 cursor-pointer"
               >
                 Cancel
               </button>
 
               <button
                 onClick={() => handleDelete(deleteId)}
-                className="w-full rounded-xl bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-600 sm:w-auto"
+                className="cursor-pointer w-full rounded-xl bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-600 sm:w-auto dark:bg-red-700 dark:hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {deleting ? "Deleting..." : "Delete"}
               </button>
@@ -522,13 +530,13 @@ export default function ProductsDashboard() {
       {formOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 p-0 sm:p-4">
           <div className="flex min-h-full items-end justify-center sm:items-center">
-            <div className="flex h-dvh w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-5xl sm:rounded-3xl">
+            <div className="flex h-dvh w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-5xl sm:rounded-3xl dark:bg-[#085E5A]">
               <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-4 py-4 sm:px-6">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
+                  <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#fdd3ad]">
                     {editing ? "Edit Product" : "Add Product"}
                   </h3>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-[#F5E1D0]">
                     {editing
                       ? "Update product details without leaving the page"
                       : "Create a new product with a clean and organized layout"}
@@ -537,7 +545,8 @@ export default function ProductsDashboard() {
 
                 <button
                   onClick={closeFormModal}
-                  className="shrink-0 rounded-xl px-3 py-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+                  className="cursor-pointer shrink-0 rounded-xl px-3 py-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700
+                  dark:text-[#fdd3ad] dark:hover:text-[#F5E1D0] dark:hover:bg-[#058078]/70"
                   type="button"
                 >
                   ✕
@@ -548,7 +557,7 @@ export default function ProductsDashboard() {
                 <div className="flex h-full flex-col px-4  py-6 sm:px-6">
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                      <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                         Product Name
                       </label>
                       <input
@@ -566,10 +575,10 @@ export default function ProductsDashboard() {
                             }));
                           }
                         }}
-                        className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                        className={`w-full rounded-xl border px-4 py-3 outline-none transition dark:text-[#fef0e4] ${
                           errors.name
                             ? "border-red-300 focus:border-red-400"
-                            : "border-slate-200 focus:border-teal-600"
+                            : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-[#058078]"
                         }`}
                       />
                       {errors.name && (
@@ -581,7 +590,7 @@ export default function ProductsDashboard() {
 
                     <div className="grid gap-5 sm:grid-cols-2">
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                        <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                           Price
                         </label>
                         <input
@@ -600,10 +609,10 @@ export default function ProductsDashboard() {
                             }
                           }}
                           placeholder="199"
-                          className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                          className={`w-full rounded-xl border px-4 py-3 outline-none transition dark:text-[#fef0e4] ${
                             errors.price
                               ? "border-red-300 focus:border-red-400"
-                              : "border-slate-200 focus:border-teal-600"
+                              : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-[#058078]"
                           }`}
                         />
                         {errors.price && (
@@ -614,7 +623,7 @@ export default function ProductsDashboard() {
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                        <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                           Category
                         </label>
                         <select
@@ -631,10 +640,10 @@ export default function ProductsDashboard() {
                               }));
                             }
                           }}
-                          className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                          className={`w-full rounded-xl border px-4 py-3 outline-none transition dark:text-[#fef0e4] ${
                             errors.categoryId
                               ? "border-red-300 focus:border-red-400"
-                              : "border-slate-200 focus:border-teal-600"
+                              : "border-slate-200 focus:border-teal-600 dark:bg-[#0e514c] dark:border-[#012926] dark:focus:border-[#058078]"
                           }`}
                         >
                           <option value="">Select Category</option>
@@ -653,7 +662,7 @@ export default function ProductsDashboard() {
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                      <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                         Description
                       </label>
                       <textarea
@@ -672,10 +681,10 @@ export default function ProductsDashboard() {
                         }}
                         placeholder="Write a short and clear product description"
                         rows={5}
-                        className={`w-full rounded-xl border px-4 py-3 outline-none transition ${
+                        className={`w-full rounded-xl border px-4 py-3 outline-none transition dark:text-[#fef0e4]  ${
                           errors.description
                             ? "border-red-300 focus:border-red-400"
-                            : "border-slate-200 focus:border-teal-600"
+                            : "border-slate-200 focus:border-teal-600 dark:border-[#012926] dark:focus:border-[#058078]"
                         }`}
                       />
                       {errors.description && (
@@ -686,7 +695,7 @@ export default function ProductsDashboard() {
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-700">
+                      <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                         Product Image
                       </label>
 
@@ -707,7 +716,7 @@ export default function ProductsDashboard() {
                             ? "border-teal-600 bg-teal-50"
                             : errors.image
                               ? "border-red-300 bg-red-50/40"
-                              : "border-slate-300 bg-slate-50"
+                              : "border-slate-300 bg-slate-50 dark:border-[#012926] dark:bg-[#0e514c]"
                         }`}
                       >
                         <input
@@ -720,22 +729,22 @@ export default function ProductsDashboard() {
                           className="hidden"
                         />
 
-                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm">
+                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-sm dark:bg-[#012926] dark:text-[#fdd3ad]">
                           🖼️
                         </div>
 
-                        <p className="mt-4 text-sm font-medium text-slate-700">
+                        <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                           Drag and drop the image here or choose it from your
                           device
                         </p>
 
-                        <p className="mt-1 text-xs text-slate-500">
+                        <p className="mt-1 text-xs text-slate-500 dark:text-[#F5E1D0]">
                           JPG / PNG / WEBP — max 2MB
                         </p>
 
                         <label
                           htmlFor="product-image-modal"
-                          className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+                          className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                         >
                           Choose Image
                         </label>
@@ -745,7 +754,7 @@ export default function ProductsDashboard() {
                             <img
                               src={preview}
                               alt="Preview"
-                              className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200"
+                              className="mx-auto h-40 w-full max-w-xs rounded-xl object-cover ring-1 ring-slate-200 dark:ring-[#012926]"
                             />
                           </div>
                         )}
@@ -758,7 +767,7 @@ export default function ProductsDashboard() {
                       )}
                     </div>
 
-                    <label className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3">
+                    <label className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 dark:border-[#012926]">
                       <input
                         type="checkbox"
                         checked={form.isVisible}
@@ -769,7 +778,7 @@ export default function ProductsDashboard() {
                           }))
                         }
                       />
-                      <span className="text-sm font-medium text-slate-700">
+                      <span className="text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
                         Product Available
                       </span>
                     </label>
@@ -784,7 +793,7 @@ export default function ProductsDashboard() {
                       <button
                         type="button"
                         onClick={closeFormModal}
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto"
+                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926] dark:text-[#F5E1D0] dark:hover:bg-[#058078]/70"
                       >
                         Cancel
                       </button>
@@ -792,7 +801,7 @@ export default function ProductsDashboard() {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                        className="w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                       >
                         {submitting
                           ? "Saving..."
@@ -815,10 +824,12 @@ export default function ProductsDashboard() {
 function EmptyState({ onAdd }: { onAdd: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-2xl">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-2xl dark:bg-[#012926]">
         📦
       </div>
-      <h3 className="text-lg font-semibold text-slate-900">No products yet</h3>
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-[#F5E1D0]">
+        No products yet
+      </h3>
     </div>
   );
 }

@@ -17,12 +17,12 @@ export default function ThemeSwitch() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="
         relative w-12 h-7 rounded-full
-        bg-[#0F8F8C] dark:bg-gray-700
+        bg-[#0F8F8C] dark:bg-[#F5E1D0]
         transition-colors duration-300
         flex items-center
-        hover:bg-gray-300 dark:hover:bg-gray-600
-
+        hover:bg-gray-300 dark:hover:bg-[#76c3bf]
       "
+      aria-label="Toggle theme"
     >
       <span
         className={`
@@ -31,6 +31,7 @@ export default function ThemeSwitch() {
           flex items-center justify-center
           text-gray-400 text-xs
           transition-all duration-300 
+          dark:bg-[#085E5A]
           ${isDark ? "translate-x-5" : ""}
         `}
       >

@@ -6,6 +6,7 @@ import { useCategories } from "@/app/hooks/useCategories";
 import CategoryModal from "@/app/components/CategoryModal";
 import DeleteCategoryModal from "@/app/components/DeleteCategoryModal";
 import Toast from "@/app/components/Toast";
+import { stat } from "fs";
 
 export default function CategoriesDashboard() {
   const { categories, loading, error, mutateCategories } = useCategories();
@@ -62,13 +63,15 @@ export default function CategoriesDashboard() {
     setOpenEdit(true);
   };
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) return <p className="p-6 dark:text-[#fdd3ad]">Loading...</p>;
   if (error) {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Categories</h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
+            Categories
+          </h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             control and manage your product categories
           </p>
         </div>
@@ -90,7 +93,9 @@ export default function CategoriesDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">Categories</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
+            Categories
+          </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             Manage your product categories and display them in an organized
             manner within the site
@@ -108,7 +113,9 @@ export default function CategoriesDashboard() {
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#0e514c]">
-          <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">Total Categories</p>
+          <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">
+            Total Categories
+          </p>
           <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-[#F5E1D0]">
             {totalCategories}
           </p>
@@ -231,7 +238,12 @@ export default function CategoriesDashboard() {
       <CategoryModal
         open={formOpen}
         onClose={() => setFormOpen(false)}
-        onSaved={(category) => console.log(category)}
+        onSaved={(category, massagedCategory, status) =>
+          showToast(
+            massagedCategory,
+            status === "success" ? "success" : "error",
+          )
+        }
       />
     </div>
   );
