@@ -2,29 +2,39 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X } from "lucide-react";
+import type { Lang } from "@/i18n/config";
+import { useTranslation } from "@/i18n/TranslationProvider";
 
-const links = [
-  { href: "/admin", label: "Home" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/categories", label: "Categories" },
-];
+import { X } from "lucide-react";
 
 export default function AdminSidebar({
   open,
   onClose,
+  lang,
 }: {
   open: boolean;
   onClose: () => void;
+  lang: Lang;
 }) {
   const pathname = usePathname();
+    const { t } = useTranslation();
 
+  const links = [
+    { href: `/${lang}/admin`, label: t("admin.dashboard") },
+    { href: `/${lang}/admin/products`, label: t("admin.products.title") },
+    {
+      href: `/${lang}/admin/categories`,
+      label: t("admin.categories.title"),
+    },
+  ];
   return (
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden w-64 shrink-0 border-r border-slate-200 bg-white md:block dark:bg-teal-900 dark:border-[#F5E1D0]">
         <div className="p-6">
-          <div className="mb-8 text-2xl font-bold text-teal-700 dark:text-[#fec899]">Maxirain</div>
+          <div className="mb-8 text-2xl font-bold text-teal-700 dark:text-[#fec899]">
+            Maxirain
+          </div>
 
           <nav className="space-y-2">
             {links.map((link) => {
@@ -59,7 +69,9 @@ export default function AdminSidebar({
 
           <aside className="absolute right-0 top-0 flex h-full w-[88%] max-w-xs flex-col bg-white shadow-2xl dark:bg-teal-900">
             <div className="flex items-center justify-between border-b border-slate-200 p-5">
-              <div className="text-xl font-bold text-teal-700 dark:text-[#fec899]">Maxirain</div>
+              <div className="text-xl font-bold text-teal-700 dark:text-[#fec899]">
+                Maxirain
+              </div>
 
               <button
                 onClick={onClose}
@@ -81,7 +93,7 @@ export default function AdminSidebar({
                     onClick={onClose}
                     className={`block rounded-xl px-4 py-3 text-sm font-medium transition ${
                       active
-                        ? "bg-teal-50 text-teal-700"
+                        ? "bg-teal-50 text-teal-700 dark:bg-teal-700 dark:text-[#fec899]"
                         : "text-slate-600 hover:bg-slate-50 dark:text-[#F5E1D0]"
                     }`}
                   >

@@ -4,14 +4,20 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Menu } from "lucide-react";
 import ThemeSwitch from "../ThemeSwitch";
+import type { Lang } from "@/i18n/config";
+import LanguageSwitcher from "../LanguageSwitcher";
+import { useTranslation } from "@/i18n/TranslationProvider";
 
 export default function AdminHeader({
   onMenuClick,
+  lang,
 }: {
   onMenuClick: () => void;
+  lang: Lang;
 }) {
   const router = useRouter();
   const supabase = createClient();
+    const { t } = useTranslation();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -42,21 +48,23 @@ export default function AdminHeader({
             Maxirain Admin
           </h1>
           <p className="text-xs text-slate-500 sm:text-sm dark:text-[#F5E1D0]">
-            Dashboard
+            {t("admin.dashboard")}
           </p>
         </div>
       </div>
       <div className="hidden md:flex items-center gap-4">
+        <LanguageSwitcher lang={lang} />
         <ThemeSwitch />
         <button
           onClick={handleLogout}
           className="cursor-pointer rounded-xl bg-red-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
         >
-          Logout
+          {t("admin.logout")}
         </button>
       </div>
       {/* Mobile Controls */}
       <div className="flex items-center gap-2 md:hidden">
+        <LanguageSwitcher lang={lang} />
         <ThemeSwitch />
         <button
           onClick={handleLogout}

@@ -1,0 +1,35 @@
+{
+  "navbar": {
+    "home": "Home",
+    "products": "Products",
+    "contact": "Contact",
+    "admin": "Admin"
+  },
+  "home": {
+    "heroTitle": "Intelligent Water Solutions for a Sustainable Tomorrow",
+    "heroDescription": "We build modern irrigation and water management systems focused on efficiency and sustainability."
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "welcome": "Welcome to the Maxirain admin dashboard",
+    "categories": {
+      "heroDescription": "Manage your product categories and display them in an organized manner within the site",
+      "title": "Manage Categories",
+      "create": "Add Category",
+      "total": "Total Categories"
+    },
+    "products": {
+      "title": "Manage Products",
+      "create": "Add Product"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Operation completed successfully"
+  }
+}

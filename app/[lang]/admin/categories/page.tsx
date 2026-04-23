@@ -6,7 +6,7 @@ import { useCategories } from "@/app/hooks/useCategories";
 import CategoryModal from "@/app/components/CategoryModal";
 import DeleteCategoryModal from "@/app/components/DeleteCategoryModal";
 import Toast from "@/app/components/Toast";
-import { stat } from "fs";
+import { useTranslation } from "@/i18n/TranslationProvider";
 
 export default function CategoriesDashboard() {
   const { categories, loading, error, mutateCategories } = useCategories();
@@ -26,6 +26,7 @@ export default function CategoriesDashboard() {
     setSelected(cat);
     setOpen(true);
   };
+    const { t } = useTranslation();
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ message, type });
@@ -63,13 +64,13 @@ export default function CategoriesDashboard() {
     setOpenEdit(true);
   };
 
-  if (loading) return <p className="p-6 dark:text-[#fdd3ad]">Loading...</p>;
+  if (loading) return <p className="p-6 dark:text-[#fdd3ad]">{t("common.loading")}</p>;
   if (error) {
     return (
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
-            Categories
+            {t("admin.categories.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
             control and manage your product categories
@@ -94,19 +95,18 @@ export default function CategoriesDashboard() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
-            Categories
+            {t("admin.categories.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
-            Manage your product categories and display them in an organized
-            manner within the site
+            {t("admin.categories.heroDescription")}
           </p>
         </div>
 
         <button
           onClick={() => setFormOpen(true)}
-          className="cursor-pointer mt-6 inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800 dark:bg-teal-500 dark:hover:bg-teal-600"
+          className="cursor-pointer mt-6 inline-flex items-center border justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 dark:text-[#fdd3ad] dark:border-[#F5E1D0]"
         >
-          + Add Category
+          {t("admin.categories.create")} +
         </button>
       </div>
 
@@ -114,7 +114,7 @@ export default function CategoriesDashboard() {
       <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#0e514c]">
           <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">
-            Total Categories
+            {t("admin.categories.total")}
           </p>
           <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-[#F5E1D0]">
             {totalCategories}
@@ -186,7 +186,7 @@ export default function CategoriesDashboard() {
                             onClick={() => handleOpenEdit(category)}
                             className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
                           >
-                            Edit
+                            {t("common.edit")}
                           </button>
 
                           <button
@@ -229,8 +229,8 @@ export default function CategoriesDashboard() {
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-2xl">
               📂
             </div>
-            <h3 className="text-lg font-semibold text-slate-900">
-              no categories yet
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-[#F5E1D0]">
+              {t("admin.categories.noCategories")}
             </h3>
           </div>
         )}

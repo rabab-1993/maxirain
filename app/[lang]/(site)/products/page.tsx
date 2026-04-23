@@ -6,47 +6,7 @@ import Link from "next/link";
 import { useCategories } from "@/app/hooks/useCategories";
 
 export default function ProductsPage() {
-  const products = [
-    {
-      title: "Sprinkler Systems",
-      slug: "sprinkler-systems",
-      desc: "High-efficiency irrigation systems designed for precision coverage.",
-      image: "/products/sprinkler.jpg",
-    },
-    {
-      title: "Pipe Sealing Solutions",
-      slug: "pipe-sealing",
-      desc: "Durable sealing components for leak prevention.",
-      image: "/products/pipe-sealing.png",
-    },
-    {
-      title: "Smart Controllers",
-      slug: "smart-controllers",
-      desc: "Intelligent control units optimizing water usage.",
-      image: "/products/controller.png",
-    },
-    {
-      title: "Rainwater Management",
-      slug: "rainwater-management",
-      desc: "Solutions for capturing and managing rainwater.",
-      image: "/products/rainwater.jpg",
-    },
-    {
-      title: "Elastomer Components",
-      slug: "elastomer-components",
-      desc: "Industrial-grade materials for water environments.",
-      image: "/products/elastomer.jpg",
-    },
-    {
-      title: "Custom Systems",
-      slug: "custom-systems",
-      desc: "Tailored solutions for infrastructure projects.",
-      image: "/products/custom.jpg",
-    },
-  ];
-
   const { categories } = useCategories();
-  
 
   return (
     <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
