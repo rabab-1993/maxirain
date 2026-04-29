@@ -5,11 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeSwitch from "./ThemeSwitch";
 import { Menu, X } from "lucide-react";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { Lang } from "@/i18n/config";
+import { useTranslation } from "@/i18n/TranslationProvider";
 
-export default function Navbar() {
+export default function Navbar({ lang }: { lang: Lang }) {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [lang, setLang] = useState("EN");
   const pathname = usePathname();
 
   /* ---------------- SCROLL EFFECT ---------------- */
@@ -22,74 +24,47 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ---------------- LOAD LANGUAGE ---------------- */
-  useEffect(() => {
-    const savedLang = localStorage.getItem("lang");
-    if (savedLang) {
-      setLang(savedLang);
-      applyDirection(savedLang);
-    }
-  }, []);
-
-  /* ---------------- APPLY DIRECTION ---------------- */
-  const applyDirection = (language: string) => {
-    if (language === "AR") {
-      document.documentElement.dir = "rtl";
-      document.documentElement.lang = "ar";
-    } else {
-      document.documentElement.dir = "ltr";
-      document.documentElement.lang = "en";
-    }
-  };
-
-  /* ---------------- TOGGLE LANGUAGE ---------------- */
-  const toggleLanguage = () => {
-    const newLang = lang === "EN" ? "AR" : "EN";
-    setLang(newLang);
-    localStorage.setItem("lang", newLang);
-    applyDirection(newLang);
-  };
+  const { t } = useTranslation();
 
   const navLinks = [
-    { name: lang === "EN" ? "Home" : "الرئيسية", href: "/" },
-    { name: lang === "EN" ? "About" : "من نحن", href: "/about" },
-    { name: lang === "EN" ? "Products" : "المنتجات", href: "/products" },
-    { name: lang === "EN" ? "Contact" : "تواصل", href: "/contact" },
+    { name: t("navbar.home"), href: `/${lang}/` },
+    { name: t("navbar.about"), href: `/${lang}/about` },
+    { name: t("navbar.products"), href: `/${lang}/products` },
+    { name: t("navbar.contact"), href: `/${lang}/contact` },
   ];
 
   return (
     <nav
       className={`
-        fixed top-0 w-full z-50 transition-all duration-300 dark:text-slate-200
+        fixed top-0 w-full z-50 transition-all duration-300 dark:text-[#fdd3ad]
         ${
           scrolled
-            ? "bg-[#E6C8A6] dark:bg-blue-950/90 backdrop-blur shadow-sm"
+            ? "bg-[#E6C8A6] dark:bg-[#085E5A] backdrop-blur shadow-sm"
             : "bg-transparent"
         }
       `}
     >
       <div
-        className={`
-  max-w-7xl mx-auto px-6 h-16 flex items-center justify-between
+        className={` max-w-7xl mx-auto px-6 h-16 flex items-center justify-between
   ${
     scrolled
-      ? "text-teal-800 dark:text-blue-100"
+      ? "text-teal-800 dark:text-[#fdd3ad]"
       : pathname === "/about"
         ? "text-slate-200"
-        : "text-teal-800 dark:text-blue-100"
+        : "text-teal-800 dark:text-[#fdd3ad]"
   }
 `}
       >
         {/* LOGO */}
         <Link
           href="/"
-          className={`text-xl font-semibold text-teal-800 dark:text-blue-100
+          className={`text-xl font-semibold text-teal-800 dark:text-[#fdd3ad]
  ${
    scrolled
-     ? "text-teal-800 dark:text-blue-100"
+     ? "text-teal-800 dark:text-[#fdd3ad]"
      : pathname === "/about"
        ? "text-slate-200"
-       : "text-teal-800 dark:text-blue-100"
+       : "text-teal-800 dark:text-[#fdd3ad]"
  }`}
         >
           Maxirain
@@ -107,26 +82,14 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Language Button */}
-          <button
-            onClick={toggleLanguage}
-            className="px-3 py-1 text-xs border rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-          >
-            {lang}
-          </button>
+          <LanguageSwitcher lang={lang} />
 
           <ThemeSwitch />
         </div>
 
         {/* Mobile Controls */}
         <div className="flex items-center gap-2 md:hidden">
-          <button
-            onClick={toggleLanguage}
-            className="px-2 py-1 text-xs border rounded-md"
-          >
-            {lang}
-          </button>
-
+          <LanguageSwitcher lang={lang} />
           <ThemeSwitch />
 
           <button
@@ -146,7 +109,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div className="md:hidden bg-white dark:bg-[#085E5A] border-t border-slate-200 dark:border-slate-800">
           <div className="flex flex-col px-6 py-4 space-y-4 text-sm font-medium">
             {navLinks.map((link, i) => (
               <Link

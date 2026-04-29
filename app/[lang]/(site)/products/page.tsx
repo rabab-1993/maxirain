@@ -4,18 +4,20 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useCategories } from "@/app/hooks/useCategories";
+import { useParams } from "next/navigation";
 
 export default function ProductsPage() {
+  const params = useParams<{ lang: string}>();
   const { categories } = useCategories();
 
   return (
-    <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+    <main className="bg-slate-50 dark:bg-[#085E5A] text-slate-800">
       {/* HERO */}
-      <section className="py-24 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-center">
-        <h1 className="text-4xl font-semibold mb-4 text-slate-900 dark:text-slate-100">
+      <section className="py-24 bg-white dark:bg-[#0e514c] border-b border-slate-200 dark:border-[#093532] text-center">
+        <h1 className="text-4xl font-semibold mb-4 text-slate-900 dark:text-[#fdd3ad]">
           Our Products
         </h1>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-slate-600 dark:text-[#F5E1D0]">
           Reliable, efficient, and industrial-grade water solutions.
         </p>
       </section>
@@ -31,14 +33,15 @@ export default function ProductsPage() {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               viewport={{ once: true }}
               className="
-                bg-white dark:bg-slate-900
-                border border-slate-200 dark:border-slate-800
+                bg-white dark:bg-[#0e514c]
+                dark:border-[#093532]
+                border border-slate-200 
                 rounded-lg overflow-hidden
                 hover:shadow-md
                 transition-all duration-300
               "
             >
-              <Link href={`/products/${cat.id}`}>
+              <Link href={`/${params.lang}/products/${cat.id}`}>
                 {/* IMAGE */}
                 <div className="relative h-52 w-full">
                   <Image
@@ -53,11 +56,11 @@ export default function ProductsPage() {
 
                 {/* CONTENT */}
                 <div className="p-8">
-                  <h3 className="text-lg font-semibold mb-3 text-slate-900 dark:text-slate-100">
+                  <h3 className="text-lg font-semibold mb-3 text-slate-900 dark:text-[#fdd3ad]">
                     {cat.name}
                   </h3>
 
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-[#F5E1D0] mb-6 leading-relaxed">
                     {cat.description}
                   </p>
 

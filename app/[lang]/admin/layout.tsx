@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import Providers from "../(site)/providers";
-
-import { notFound } from "next/navigation";
 import "../../globals.css";
+import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getDirection, isValidLocale, type Lang } from "@/i18n/config";
 import AdminShell from "./AdminShell";

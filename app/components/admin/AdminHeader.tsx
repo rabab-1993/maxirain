@@ -17,7 +17,7 @@ export default function AdminHeader({
 }) {
   const router = useRouter();
   const supabase = createClient();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -70,7 +70,7 @@ export default function AdminHeader({
           onClick={handleLogout}
           className="cursor-pointer rounded-xl bg-red-800 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 sm:px-4 sm:py-2 sm:text-sm"
         >
-          Logout
+          {t("admin.logout")}
         </button>
       </div>
     </header>

@@ -16,6 +16,7 @@ export default function ThemeSwitch() {
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="
+      cursor-pointer
         relative w-12 h-7 rounded-full
         bg-[#0F8F8C] dark:bg-[#F5E1D0]
         transition-colors duration-300

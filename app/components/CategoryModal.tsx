@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Category } from "@/app/types/category";
 import { useCategories } from "@/app/hooks/useCategories";
+import { useTranslation } from "@/i18n/TranslationProvider";
 
 type FormErrors = {
   name?: string;
@@ -39,6 +40,7 @@ export default function CategoryModal({
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutateCategories } = useCategories();
+  const { t } = useTranslation();
 
   const acceptedTypes = useMemo(
     () => ["image/jpeg", "image/png", "image/webp"],
@@ -73,11 +75,11 @@ export default function CategoryModal({
     const maxSize = 2 * 1024 * 1024;
 
     if (!acceptedTypes.includes(file.type)) {
-      return "The image must be in JPG, PNG, or WEBP format";
+      return t("admin.categories.validation.imageType");
     }
 
     if (file.size > maxSize) {
-      return "The image size must not exceed 2MB";
+      return t("admin.categories.validation.imageSize");
     }
 
     return "";
@@ -86,13 +88,16 @@ export default function CategoryModal({
   const validateForm = () => {
     const nextErrors: FormErrors = {};
 
-    if (!name.trim()) nextErrors.name = "Required category name";
+    if (!name.trim())
+      nextErrors.name = t("admin.categories.validation.nameRequired");
     if (!description.trim()) {
-      nextErrors.description = "Required category description";
+      nextErrors.description = t(
+        "admin.categories.validation.descriptionRequired",
+      );
     }
 
     if (!isEditMode && !image && !preview) {
-      nextErrors.image = "Required category image";
+      nextErrors.image = t("admin.categories.validation.imageRequired");
     }
 
     return nextErrors;
@@ -154,17 +159,17 @@ export default function CategoryModal({
         massagedCategory =
           data?.error ||
           (isEditMode
-            ? "Failed to update category"
-            : "Failed to create category");
-            }
+            ? t("admin.categories.updateFailed")
+            : t("admin.categories.createFailed"));
+      }
 
       await mutateCategories();
       if (res.ok) {
         massagedCategory =
           data?.message ||
           (isEditMode
-            ? "Category updated successfully"
-            : "Category created successfully");
+            ? t("admin.categories.categoryUpdated")
+            : t("admin.categories.categoryCreated"));
       }
       const savedCategory: Category =
         data.category ?? data.updatedCategory ?? data;
@@ -189,7 +194,9 @@ export default function CategoryModal({
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 sm:px-6 dark:border-[#012926]">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#F5E1D0]">
-                  {isEditMode ? "Edit Category" : "Create New Category"}
+                  {isEditMode
+                    ? t("admin.categories.edit")
+                    : t("admin.categories.create")}
                 </h3>
               </div>
 
@@ -207,7 +214,7 @@ export default function CategoryModal({
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                      Category Name
+                      {t("admin.categories.fields.name")}
                     </label>
                     <input
                       type="text"
@@ -218,7 +225,7 @@ export default function CategoryModal({
                           setErrors((prev) => ({ ...prev, name: undefined }));
                         }
                       }}
-                      placeholder="Category Name"
+                      placeholder={t("admin.categories.fields.name")}
                       className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
                         errors.name
                           ? "border-red-300 focus:border-red-400"
@@ -232,7 +239,7 @@ export default function CategoryModal({
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                      Description
+                      {t("admin.categories.fields.description")}
                     </label>
                     <textarea
                       value={description}
@@ -245,7 +252,7 @@ export default function CategoryModal({
                           }));
                         }
                       }}
-                      placeholder="Describe the category"
+                      placeholder={t("admin.categories.fields.description")}
                       rows={5}
                       className={`w-full rounded-xl border px-4 py-3 dark:text-[#fef0e4] outline-none transition ${
                         errors.description
@@ -262,7 +269,7 @@ export default function CategoryModal({
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                      Category Image
+                      {t("admin.categories.fields.image")}
                     </label>
 
                     <div
@@ -300,18 +307,18 @@ export default function CategoryModal({
                       </div>
 
                       <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#fdd3ad]">
-                        Drag & drop your image here, or click to select a file
+                        {t("common.imageUpload")}
                       </p>
 
                       <p className="mt-1 text-xs text-slate-500 dark:text-[#fdd3ad]">
-                        JPG / PNG / WEBP — max size 2MB
+                        {t("common.imageHint")}
                       </p>
 
                       <label
                         htmlFor="category-image-modal"
                         className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]"
                       >
-                        choose Image
+                        {t("common.image")}
                       </label>
 
                       {preview && (
@@ -343,7 +350,7 @@ export default function CategoryModal({
                       onClick={handleClose}
                       className="cursor-pointer rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                     >
-                      Cancel
+                      {t("common.cancel")}
                     </button>
 
                     <button
@@ -353,11 +360,11 @@ export default function CategoryModal({
                     >
                       {submitting
                         ? isEditMode
-                          ? "Updating..."
-                          : "Creating..."
+                          ? t("common.update")
+                          : t("common.creating")
                         : isEditMode
-                          ? "Update Category"
-                          : "Create Category"}
+                          ? t("common.edit")
+                          : t("common.save")}
                     </button>
                   </div>
                 </form>

@@ -1,17 +1,15 @@
 "use client";
 
 import Toast from "@/app/components/Toast";
+import { useCategories } from "@/app/hooks/useCategories";
+import { useProducts } from "@/app/hooks/useProducts";
 import {
   Product,
   ProductFormErrors,
   ProductFormState,
 } from "@/app/types/product";
-import { useEffect, useMemo, useState } from "react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import { useTranslation } from "@/i18n/TranslationProvider";
+import { useMemo, useState } from "react";
 
 const initialForm: ProductFormState = {
   name: "",
@@ -23,10 +21,6 @@ const initialForm: ProductFormState = {
 };
 
 export default function ProductsDashboard() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const [formOpen, setFormOpen] = useState(false);
@@ -46,6 +40,9 @@ export default function ProductsDashboard() {
     () => ["image/jpeg", "image/png", "image/webp"],
     [],
   );
+  const { t } = useTranslation();
+  const { categories } = useCategories();
+  const { mutateProducts, products, loading, error } = useProducts();
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ message, type });
@@ -54,36 +51,9 @@ export default function ProductsDashboard() {
       setToast(null);
     }, 3000);
   };
-  const fetchData = async () => {
-    try {
-      const [pRes, cRes] = await Promise.all([
-        fetch(process.env.NEXT_PUBLIC_API_URL + "/products"),
-        fetch(process.env.NEXT_PUBLIC_API_URL + "/categories"),
-      ]);
-
-      if (!pRes.ok || !cRes.ok) {
-        throw new Error("Failed to fetch dashboard data");
-      }
-
-      const productsData = await pRes.json();
-      const categoriesData = await cRes.json();
-
-      setProducts(productsData);
-      setCategories(categoriesData);
-      setError(false);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const getCategoryName = (categoryId?: number) => {
-    return categories.find((c) => c.id === categoryId)?.name || "-";
+    return categories.find((c) => Number(c.id) === categoryId)?.name || "-";
   };
 
   const validateImage = (file: File) => {
@@ -211,8 +181,8 @@ export default function ProductsDashboard() {
 
       if (!res.ok) {
         let message = editing
-          ? "Failed to update product"
-          : "Failed to create product";
+          ? t("admin.products.updateFailed")
+          : t("admin.products.createFailed");
         try {
           const data = await res.json();
           message = data.error || message;
@@ -223,17 +193,16 @@ export default function ProductsDashboard() {
       }
       showToast(
         editing
-          ? "Product updated successfully"
-          : "Product created successfully",
+          ? t("admin.products.productUpdated")
+          : t("admin.products.productCreated"),
         "success",
       );
-      await fetchData();
+      mutateProducts();
       closeFormModal();
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        submit:
-          error instanceof Error ? error.message : "unexpected error occurred",
+        submit: error instanceof Error ? error.message : t("common.error"),
       }));
       console.log(error);
     } finally {
@@ -252,16 +221,16 @@ export default function ProductsDashboard() {
       const data = await res.json();
 
       if (!res.ok) {
-        showToast(data.error || "Failed to delete product", "error");
+        showToast(data.error || t("admin.products.deleteFailed"), "error");
 
         throw new Error("Delete failed");
       }
-      showToast(data.message || "Product deleted successfully", "success");
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      showToast(data.message || t("admin.products.productDeleted"), "success");
+      mutateProducts();
       setDeleteId(null);
       setDeleting(false);
     } catch (error) {
-      showToast("Failed to delete product", "error");
+      showToast(t("admin.products.deleteFailed"), "error");
       setDeleting(false);
     }
   };
@@ -269,7 +238,11 @@ export default function ProductsDashboard() {
   const totalProducts = products.length;
 
   if (loading) {
-    return <p className="p-6 text-slate-500 dark:text-[#fdd3ad]">Loading...</p>;
+    return (
+      <p className="p-6 text-slate-500 dark:text-[#fdd3ad]">
+        {t("common.loading")}
+      </p>
+    );
   }
 
   if (error) {
@@ -277,15 +250,15 @@ export default function ProductsDashboard() {
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-[#F5E1D0]">
-            Products
+            {t("admin.products.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
-            Manage your products and organize their display inside the store
+            {t("admin.products.heroDescription")}
           </p>
         </div>
 
         <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-red-600 shadow-sm">
-          Failed to load products.
+          {t("admin.products.loadFailed")}
         </div>
       </div>
     );
@@ -299,18 +272,18 @@ export default function ProductsDashboard() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-[#F5E1D0]">
-            Products
+            {t("admin.products.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
-            Manage your products and display them in a clean and organized way
+            {t("admin.products.heroDescription")}
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-800 sm:w-auto"
+          className="cursor-pointer inline-flex w-full items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-medium text-white transition border hover:bg-teal-800 sm:w-auto  dark:hover:bg-teal-600 dark:text-[#fdd3ad] dark:border-[#F5E1D0]"
         >
-          + Add Product
+          {t("admin.products.create")}
         </button>
       </div>
 
@@ -318,10 +291,10 @@ export default function ProductsDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6 dark:bg-[#0e514c]">
           <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">
-            Total Products
+            {t("admin.products.total")}
           </p>
           <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-[#F5E1D0]">
-            {totalProducts}
+            {totalProducts.toLocaleString(t("common.numberType"))}
           </p>
         </div>
       </div>
@@ -332,14 +305,28 @@ export default function ProductsDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-245">
               <thead className="bg-slate-50 dark:bg-[#0e514c]">
-                <tr className="text-left text-sm text-slate-500 dark:text-[#fdd3ad]">
-                  <th className="px-4 py-4 font-medium">Image</th>
-                  <th className="px-4 py-4 font-medium">Name</th>
-                  <th className="px-4 py-4 font-medium">Price</th>
-                  <th className="px-4 py-4 font-medium">Description</th>
-                  <th className="px-4 py-4 font-medium">Status</th>
-                  <th className="px-4 py-4 font-medium">Category</th>
-                  <th className="px-4 py-4 font-medium">Actions</th>
+                <tr className="text-start text-sm text-slate-500 dark:text-[#fdd3ad]">
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.image")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.name")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.price")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.description")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.status")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.category")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.products.fields.actions")}
+                  </th>
                 </tr>
               </thead>
 
@@ -368,7 +355,14 @@ export default function ProductsDashboard() {
                     </td>
 
                     <td className="px-4 py-4 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                      {product.price} SAR
+                      {Number(product.price).toLocaleString(
+                        t("common.numberType"),
+                      )}
+                      {t("common.numberType") === "ar-SA" ? (
+                        <span className="text-base"> &#x20C1; </span>
+                      ) : (
+                        <span className="font-bold text-base"> SAR</span>
+                      )}
                     </td>
 
                     <td className="px-4 py-4 text-sm text-slate-600 dark:text-[#F5E1D0]">
@@ -380,11 +374,11 @@ export default function ProductsDashboard() {
                     <td className="px-4 py-4">
                       {product.isVisible ? (
                         <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-700 dark:text-green-100">
-                          Available
+                          {t("admin.products.fields.visible")}
                         </span>
                       ) : (
                         <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-800 dark:text-red-100">
-                          Out of stock
+                          {t("admin.products.fields.hidden")}
                         </span>
                       )}
                     </td>
@@ -397,16 +391,16 @@ export default function ProductsDashboard() {
                       <div className="flex flex-wrap items-center gap-2">
                         <button
                           onClick={() => openEditModal(product)}
-                          className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
+                          className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
                         >
-                          Edit
+                          {t("common.edit")}
                         </button>
 
                         <button
                           onClick={() => setDeleteId(product.id)}
-                          className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
+                          className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
                         >
-                          Delete
+                          {t("common.delete")}
                         </button>
                       </div>
                     </td>
@@ -416,7 +410,7 @@ export default function ProductsDashboard() {
             </table>
           </div>
         ) : (
-          <EmptyState onAdd={openCreateModal} />
+          <EmptyState onAdd={openCreateModal} t={t} />
         )}
       </div>
 
@@ -447,7 +441,14 @@ export default function ProductsDashboard() {
                   </h3>
 
                   <p className="mt-1 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                    {product.price} SAR
+                    {Number(product.price).toLocaleString(
+                      t("common.numberType"),
+                    )}
+                    {t("common.numberType") === "ar-SA" ? (
+                      <span className="text-base"> &#x20C1; </span>
+                    ) : (
+                      <span className="font-bold text-base"> SAR</span>
+                    )}
                   </p>
 
                   <p className="mt-2 line-clamp-3 text-sm text-slate-500 dark:text-[#F5E1D0]">
@@ -457,11 +458,11 @@ export default function ProductsDashboard() {
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     {product.isVisible ? (
                       <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:text-green-100 dark:bg-green-700">
-                        Available
+                        {t("admin.products.fields.available")}
                       </span>
                     ) : (
                       <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:text-red-100 dark:bg-red-800">
-                        Out of stock
+                        {t("admin.products.fields.outOfStock")}
                       </span>
                     )}
 
@@ -475,22 +476,22 @@ export default function ProductsDashboard() {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
                   onClick={() => openEditModal(product)}
-                  className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
+                  className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
                 >
-                  Edit
+                  {t("common.edit")}
                 </button>
 
                 <button
                   onClick={() => setDeleteId(product.id)}
-                  className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
+                  className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
                 >
-                  Delete
+                  {t("common.delete")}
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <EmptyState onAdd={openCreateModal} />
+          <EmptyState onAdd={openCreateModal} t={t} />
         )}
       </div>
 
@@ -499,10 +500,10 @@ export default function ProductsDashboard() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#085E5A]">
             <h3 className="text-lg font-bold text-slate-900 dark:text-[#F5E1D0]">
-              Delete Product
+              {t("common.heroDelete")}
             </h3>
             <p className="mt-2 text-sm text-slate-500 dark:text-[#F5E1D0]">
-              Are you sure you want to delete this product?
+              {t("common.confirmDelete")}
             </p>
 
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
@@ -512,14 +513,14 @@ export default function ProductsDashboard() {
                  text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926] 
                 dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70 cursor-pointer"
               >
-                Cancel
+                {t("common.cancel")}
               </button>
 
               <button
                 onClick={() => handleDelete(deleteId)}
                 className="cursor-pointer w-full rounded-xl bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-600 sm:w-auto dark:bg-red-700 dark:hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {deleting ? "Deleting..." : "Delete"}
+                {deleting ? t("common.deleting") : t("common.delete")}
               </button>
             </div>
           </div>
@@ -532,16 +533,11 @@ export default function ProductsDashboard() {
           <div className="flex min-h-full items-end justify-center sm:items-center">
             <div className="flex h-dvh w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-5xl sm:rounded-3xl dark:bg-[#085E5A]">
               <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-4 py-4 sm:px-6">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#fdd3ad]">
-                    {editing ? "Edit Product" : "Add Product"}
-                  </h3>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-[#F5E1D0]">
-                    {editing
-                      ? "Update product details without leaving the page"
-                      : "Create a new product with a clean and organized layout"}
-                  </p>
-                </div>
+                <h3 className="text-lg font-bold text-slate-900 sm:text-xl dark:text-[#fdd3ad]">
+                  {editing
+                    ? t("admin.products.edit")
+                    : t("admin.products.create")}
+                </h3>
 
                 <button
                   onClick={closeFormModal}
@@ -558,7 +554,7 @@ export default function ProductsDashboard() {
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
                       <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                        Product Name
+                        {t("admin.products.fields.name")}
                       </label>
                       <input
                         type="text"
@@ -591,7 +587,7 @@ export default function ProductsDashboard() {
                     <div className="grid gap-5 sm:grid-cols-2">
                       <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                          Price
+                          {t("admin.products.fields.price")}
                         </label>
                         <input
                           type="number"
@@ -624,7 +620,7 @@ export default function ProductsDashboard() {
 
                       <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                          Category
+                          {t("admin.products.fields.category")}
                         </label>
                         <select
                           value={form.categoryId}
@@ -646,7 +642,9 @@ export default function ProductsDashboard() {
                               : "border-slate-200 focus:border-teal-600 dark:bg-[#0e514c] dark:border-[#012926] dark:focus:border-[#058078]"
                           }`}
                         >
-                          <option value="">Select Category</option>
+                          <option value="">
+                            {t("admin.products.fields.selectedCategory")}
+                          </option>
                           {categories.map((category) => (
                             <option key={category.id} value={category.id}>
                               {category.name}
@@ -663,7 +661,7 @@ export default function ProductsDashboard() {
 
                     <div>
                       <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                        Description
+                        {t("admin.products.fields.description")}
                       </label>
                       <textarea
                         value={form.description}
@@ -679,7 +677,6 @@ export default function ProductsDashboard() {
                             }));
                           }
                         }}
-                        placeholder="Write a short and clear product description"
                         rows={5}
                         className={`w-full rounded-xl border px-4 py-3 outline-none transition dark:text-[#fef0e4]  ${
                           errors.description
@@ -696,7 +693,7 @@ export default function ProductsDashboard() {
 
                     <div>
                       <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                        Product Image
+                        {t("admin.products.fields.image")}
                       </label>
 
                       <div
@@ -734,19 +731,18 @@ export default function ProductsDashboard() {
                         </div>
 
                         <p className="mt-4 text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                          Drag and drop the image here or choose it from your
-                          device
+                          {t("common.imageUpload")}
                         </p>
 
                         <p className="mt-1 text-xs text-slate-500 dark:text-[#F5E1D0]">
-                          JPG / PNG / WEBP — max 2MB
+                          {t("common.imageHint")}
                         </p>
 
                         <label
                           htmlFor="product-image-modal"
                           className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                         >
-                          Choose Image
+                          {t("common.image")}
                         </label>
 
                         {preview && (
@@ -779,7 +775,7 @@ export default function ProductsDashboard() {
                         }
                       />
                       <span className="text-sm font-medium text-slate-700 dark:text-[#F5E1D0]">
-                        Product Available
+                        {t("admin.products.fields.isVisible")}
                       </span>
                     </label>
 
@@ -793,22 +789,34 @@ export default function ProductsDashboard() {
                       <button
                         type="button"
                         onClick={closeFormModal}
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926] dark:text-[#F5E1D0] dark:hover:bg-[#058078]/70"
+                        className="cursor-pointer w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#fdd3ad] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
                       >
-                        Cancel
+                        {t("common.cancel")}
                       </button>
-
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
+                        className="cursor-pointer rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-teal-500 dark:hover:bg-teal-600 dark:disabled:bg-teal-400"
                       >
                         {submitting
-                          ? "Saving..."
+                          ? editing
+                            ? t("common.update")
+                            : t("common.creating")
                           : editing
-                            ? "Save Changes"
-                            : "Save Product"}
+                            ? t("common.edit")
+                            : t("common.save")}
                       </button>
+                      {/* <button
+                        type="submit"
+                        disabled={submitting}
+                        className="cursor-pointer w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
+                      >
+                        {submitting
+                          ? t("common.saving")
+                          : editing
+                            ? t("common.edit")
+                            : t("common.save")}
+                      </button> */}
                     </div>
                   </form>
                 </div>
@@ -821,14 +829,14 @@ export default function ProductsDashboard() {
   );
 }
 
-function EmptyState({ onAdd }: { onAdd: () => void }) {
+function EmptyState({ onAdd, t }: { onAdd: () => void; t: any }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-2xl dark:bg-[#012926]">
         📦
       </div>
       <h3 className="text-lg font-semibold text-slate-900 dark:text-[#F5E1D0]">
-        No products yet
+        {t("admin.products.noProducts")}
       </h3>
     </div>
   );

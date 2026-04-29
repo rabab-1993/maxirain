@@ -26,7 +26,7 @@ export default function CategoriesDashboard() {
     setSelected(cat);
     setOpen(true);
   };
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   const showToast = (message: string, type: "success" | "error") => {
     setToast({ message, type });
@@ -64,7 +64,8 @@ export default function CategoriesDashboard() {
     setOpenEdit(true);
   };
 
-  if (loading) return <p className="p-6 dark:text-[#fdd3ad]">{t("common.loading")}</p>;
+  if (loading)
+    return <p className="p-6 dark:text-[#fdd3ad]">{t("common.loading")}</p>;
   if (error) {
     return (
       <div className="space-y-6">
@@ -73,12 +74,12 @@ export default function CategoriesDashboard() {
             {t("admin.categories.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-[#fdd3ad]">
-            control and manage your product categories
+            {t("admin.categories.heroDescription")}
           </p>
         </div>
 
         <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-red-600 shadow-sm">
-          Failed to load categories.
+          {t("common.error")}
         </div>
       </div>
     );
@@ -117,7 +118,7 @@ export default function CategoriesDashboard() {
             {t("admin.categories.total")}
           </p>
           <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-[#F5E1D0]">
-            {totalCategories}
+            {totalCategories.toLocaleString(t("common.numberType"))}
           </p>
         </div>
       </div>
@@ -126,14 +127,24 @@ export default function CategoriesDashboard() {
       <div className=" overflow-hidden rounded-2xl bg-white shadow-sm lg:block dark:bg-[#0e514c]">
         {categories && categories.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-245">
+            <table className="w-full min-w-245 text-sm">
               <thead className="bg-slate-50 dark:bg-[#0e514c]">
-                <tr className="text-left text-sm text-slate-500 dark:text-[#fdd3ad]">
-                  <th className="px-4 py-4 font-medium">Image</th>
-                  <th className="px-4 py-4 font-medium">Name</th>
-                  <th className="px-4 py-4 font-medium">Description</th>
-                  <th className="px-4 py-4 font-medium">Date Added</th>
-                  <th className="px-4 py-4 font-medium">Actions</th>
+                <tr className="text-start text-sm text-slate-500 dark:text-[#fdd3ad]">
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.categories.fields.image")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.categories.fields.name")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.categories.fields.description")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.categories.fields.createdAt")}
+                  </th>
+                  <th className="px-4 py-4 font-medium text-start">
+                    {t("admin.categories.fields.actions")}
+                  </th>
                 </tr>
               </thead>
 
@@ -175,7 +186,7 @@ export default function CategoriesDashboard() {
                       <td className="px-4 py-4 text-sm text-slate-500 dark:text-[#fdd3ad]">
                         {category.createdAt
                           ? new Date(category.createdAt).toLocaleDateString(
-                              "ar-SA",
+                              t("common.numberType"),
                             )
                           : "-"}
                       </td>
@@ -184,7 +195,7 @@ export default function CategoriesDashboard() {
                         <div className="flex flex-wrap items-center gap-2">
                           <button
                             onClick={() => handleOpenEdit(category)}
-                            className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                            className="cursor-pointer rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-teal-500 dark:text-blue-100 dark:hover:bg-teal-600"
                           >
                             {t("common.edit")}
                           </button>
@@ -196,10 +207,10 @@ export default function CategoriesDashboard() {
                                 productsCount: category._count?.products || 0,
                               })
                             }
-                            className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+                            className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 dark:bg-red-700 dark:text-red-100 dark:hover:bg-red-600"
                             type="button"
                           >
-                            Delete
+                            {t("common.delete")}
                           </button>
                         </div>
                       </td>
@@ -219,8 +230,11 @@ export default function CategoriesDashboard() {
               open={openEdit}
               onClose={() => setOpenEdit(false)}
               category={selectedCategory}
-              onSaved={() =>
-                showToast("Category updated successfully", "success")
+              onSaved={(category, massagedCategory, status) =>
+                showToast(
+                  massagedCategory,
+                  status === "success" ? "success" : "error",
+                )
               }
             />
           </div>
