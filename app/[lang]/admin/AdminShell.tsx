@@ -26,7 +26,6 @@ export default function AdminShell({children,  lang, }: Props) {
           onMenuClick={() => setSidebarOpen(true)}
           lang={lang as Lang}
         />
-        {/* <AdminDashboardPage labels={labels} /> */}
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
     </div>

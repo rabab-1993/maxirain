@@ -36,7 +36,7 @@ export default function Navbar({ lang }: { lang: Lang }) {
   return (
     <nav
       className={`
-        fixed top-0 w-full z-50 transition-all duration-300 dark:text-[#fdd3ad]
+        fixed top-0 w-full z-50 transition-all duration-300
         ${
           scrolled
             ? "bg-[#E6C8A6] dark:bg-[#085E5A] backdrop-blur shadow-sm"
@@ -45,38 +45,38 @@ export default function Navbar({ lang }: { lang: Lang }) {
       `}
     >
       <div
-        className={` max-w-7xl mx-auto px-6 h-16 flex items-center justify-between
+        className={` max-w-7xl mx-auto px-1 h-16 flex items-center justify-between
   ${
     scrolled
-      ? "text-teal-800 dark:text-[#fdd3ad]"
-      : pathname === "/about"
-        ? "text-slate-200"
-        : "text-teal-800 dark:text-[#fdd3ad]"
+      ? "text-teal-800 dark:text-[#F5E1D0]"
+      : pathname === `/${lang}/about`
+        ? "text-slate-200 dark:text-[#F5E1D0]"
+        : "text-teal-800 dark:text-[#F5E1D0]"
   }
 `}
       >
         {/* LOGO */}
         <Link
           href="/"
-          className={`text-xl font-semibold text-teal-800 dark:text-[#fdd3ad]
+          className={`text-xl font-semibold text-[#F5E1D0]
  ${
    scrolled
-     ? "text-teal-800 dark:text-[#fdd3ad]"
-     : pathname === "/about"
-       ? "text-slate-200"
-       : "text-teal-800 dark:text-[#fdd3ad]"
+     ? "text-teal-800 dark:text-[#F5E1D0]"
+     : pathname === `/${lang}/about`
+       ? "text-slate-200 dark:text-[#F5E1D0]"
+       : "text-teal-800 dark:text-[#F5E1D0]"
  }`}
         >
           Maxirain
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <div className="hidden md:flex items-center gap-8 text-lg font-bold">
           {navLinks.map((link, i) => (
             <Link
               key={i}
               href={link.href}
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+              className="hover:text-teal-600 dark:hover:text-teal-500 transition"
             >
               {link.name}
             </Link>
@@ -94,12 +94,12 @@ export default function Navbar({ lang }: { lang: Lang }) {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`w-6 h-6 ${
+            className={`w-6 h-6 cursor-pointer ${
               scrolled
-                ? "text-blue-900 dark:text-blue-100"
-                : pathname === "/about"
-                  ? "text-slate-200"
-                  : "text-blue-900 dark:text-blue-100"
+                ? "text-teal-900 dark:text-[#fdd3ad]"
+                : pathname === `/${lang}/about`
+                  ? "text-[#F5E1D0]"
+                  : "text-[#F5E1D0] dark:text-[#fdd3ad]"
             }`}
           >
             {isOpen ? <X /> : <Menu />}
@@ -116,7 +116,7 @@ export default function Navbar({ lang }: { lang: Lang }) {
                 key={i}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="hover:text-blue-600 dark:hover:text-blue-400 transition"
+                className="hover:text-[#F5E1D0] dark:hover:text-teal-400 transition"
               >
                 {link.name}
               </Link>

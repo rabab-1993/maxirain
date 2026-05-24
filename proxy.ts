@@ -3,7 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { updateSession } from "@/lib/supabase/middleware ";
 import Negotiator from "negotiator";
 import { match } from "@formatjs/intl-localematcher";
-import { i18n, type Lang } from "./i18n/config";
+import { i18n, Lang } from "./i18n/config";
 
 function getLocale(request: NextRequest): Lang {
   const headers = {
@@ -11,26 +11,26 @@ function getLocale(request: NextRequest): Lang {
   };
 
   const languages = new Negotiator({ headers }).languages();
-  return match(languages, i18n.locales, i18n.defaultLocale) as Lang;
+  return match(languages, i18n.languages, i18n.defaultLocale) as Lang;
 }
 
 function getLocaleFromPathname(pathname: string): Lang | null {
   const segment = pathname.split("/")[1];
-  return i18n.locales.includes(segment as Lang) ? (segment as Lang) : null;
+  return i18n.languages.includes(segment as Lang) ? (segment as Lang) : null;
 }
 
-function stripLocaleFromPathname(pathname: string, locale: Lang | null) {
-  if (!locale) return pathname;
+function stripLocaleFromPathname(pathname: string, lang: Lang | null) {
+  if (!lang) return pathname;
 
-  const stripped = pathname.replace(new RegExp(`^/${locale}`), "") || "/";
+  const stripped = pathname.replace(new RegExp(`^/${lang}`), "") || "/";
   return stripped.startsWith("/") ? stripped : `/${stripped}`;
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isMissingLocale = i18n.locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  const isMissingLocale = i18n.languages.every(
+    (lang) => !pathname.startsWith(`/${lang}/`) && pathname !== `/${lang}`,
   );
 
   if (isMissingLocale) {
@@ -40,8 +40,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const locale = getLocaleFromPathname(pathname);
-  const appPathname = stripLocaleFromPathname(pathname, locale);
+  const lang = getLocaleFromPathname(pathname);
+  const appPathname = stripLocaleFromPathname(pathname, lang);
 
   let response = await updateSession(request);
 
@@ -60,14 +60,14 @@ export async function proxy(request: NextRequest) {
           });
         },
       },
-    }
+    },
   );
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const currentLocale = locale ?? i18n.defaultLocale;
+  const currentLocale = lang ?? i18n.defaultLocale;
   const isLoginPage = appPathname === "/login";
   const isAdminPage = appPathname.startsWith("/admin");
 

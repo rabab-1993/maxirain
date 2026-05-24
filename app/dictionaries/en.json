@@ -7,12 +7,32 @@
   },
   "home": {
     "heroTitle": "Intelligent Water Solutions for a Sustainable Tomorrow",
-    "heroDescription": "We build modern irrigation and water management systems focused on efficiency and sustainability."
+    "heroDescription": "Maxirain develops advanced irrigation and water management technologies designed to maximize efficiency, durability, and environmental responsibility.",
+    "exploreBtt": "Explore Solutions"
+  },
+  "highlights": {},
+  "contact": {
+    "heroDescription": "Get in touch with our team to discuss your project.",
+    "socialTool": "Follow us on:",
+    "location": "Location:",
+    "information": "Company Information",
+    "form": {
+      "title": "Send Us a Message",
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone ",
+      "mssg": "Message",
+      "send": "Send Message",
+      "sending": "Sending ..."
+    }
   },
   "admin": {
     "dashboard": "Dashboard",
     "welcome": "Welcome to the Maxirain admin dashboard",
     "logout": "Logout",
+    "loginHero": "Admin Login",
+    "login": "login",
+    "loggingIn": "Logging in...",
     "state": "State",
     "categories": {
       "heroDescription": "Manage product categories and display them in an organized way within the site",
@@ -108,6 +128,7 @@
     "productsAffected": "{count} product(s) will be affected. Please remove or reassign them before deleting this category.",
     "image": "Choose Image",
     "numberType": "en-US",
-    "currency": "SAR"
+    "currency": "SAR",
+    "messageSucss": "Message sent successfully."
   }
 }

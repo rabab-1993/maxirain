@@ -6,12 +6,8 @@ import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n/dictionaries";
-import { getDirection, isValidLocale, type Lang } from "@/i18n/config";
+import { getDirection, isValidLocale, Lang } from "@/i18n/config";
 import { TranslationProvider } from "@/i18n/TranslationProvider";
-
-export async function generateStaticParams() {
-  return [{ lang: "ar" }, { lang: "en" }];
-}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,10 +19,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Maxirain | Smart Water Management",
-  description: "Innovative irrigation and water-efficient technologies",
+type Props = {
+  params: Promise<{ lang: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+
+  return {
+    title:
+      lang === "ar"
+        ? "ماكسي رين | إدارة المياه الذكية"
+        : "Maxirain | Smart Water Management",
+
+    description:
+      lang === "ar"
+        ? "تقنيات مبتكرة للري وإدارة المياه بكفاءة"
+        : "Innovative irrigation and water-efficient technologies",
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -49,11 +60,10 @@ export default async function RootLayout({
       >
         <Providers>
           <TranslationProvider dictionary={dictionary}>
-            <Navbar lang={lang}/>
+            <Navbar lang={lang} />
             <div className="min-h-screen bg-slate-50 dark:bg-[#085E5A]">
-              
               {children}
-              </div>
+            </div>
             <Footer />
           </TranslationProvider>
         </Providers>

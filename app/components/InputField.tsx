@@ -26,7 +26,7 @@ export default function InputField({
 }: InputProps) {
   return (
     <div className="relative">
-      <label className="block text-sm mt-2 text-slate-500 dark:text-slate-400">
+      <label className="block text-sm font-bold mt-2 text-slate-500 dark:text-[#F5E1D0]">
         {label}
       </label>
       {textarea ? (
@@ -37,14 +37,12 @@ export default function InputField({
           onChange={onChange}
           className={`
             w-full px-4 py-3 rounded-md
-            bg-slate-50 dark:bg-slate-800
+            bg-slate-50 dark:bg-teal-900
             border
             ${
-              error
-                ? "border-red-500"
-                : "border-slate-300 dark:border-slate-700"
+              error ? "border-red-500" : "border-slate-300 dark:border-teal-700"
             }
-            focus:ring-2 focus:ring-blue-600
+            focus:ring-2 focus:ring-[#F5E1D0]
             outline-none transition
           `}
         />
@@ -55,14 +53,12 @@ export default function InputField({
           onChange={onChange}
           className={`
             w-full px-4 py-3 rounded-md
-            bg-slate-50 dark:bg-slate-800
+            bg-slate-50 dark:bg-teal-900
             border
             ${
-              error
-                ? "border-red-500"
-                : "border-slate-300 dark:border-slate-700"
+              error ? "border-red-500" : "border-slate-300 dark:border-teal-700"
             }
-            focus:ring-2 focus:ring-blue-600
+            focus:ring-2 focus:ring-[#F5E1D0]
             outline-none transition
           `}
         />

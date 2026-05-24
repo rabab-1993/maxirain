@@ -35,9 +35,9 @@ export default function AboutPage() {
     hidden: { opacity: 0, y: 40 },
     show: { opacity: 1, y: 0 },
   };
-
+  // dark:bg-[#085E5A]
   return (
-    <main className="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+    <main className="bg-slate-50 dark:bg-[#0e514c] text-slate-800 dark:text-[#F5E1D0]">
       {/* BANNER */}
       <section className="relative h-105 w-full">
         <Image
@@ -47,14 +47,14 @@ export default function AboutPage() {
           className="object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
-          <h1 className="text-4xl md:text-5xl font-semibold text-white">
+        <div className="absolute inset-0 bg-teal-900/60 flex items-center justify-center">
+          <h1 className="text-4xl md:text-5xl font-semibold text-[#F5E1D0]">
             About Maxirain
           </h1>
         </div>
       </section>
       {/* COMPANY OVERVIEW */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+      <section className="py-20 bg-white dark:bg-[#0e514c] border-b border-slate-200 dark:border-teal-800">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-12">
           {[
             {
@@ -81,8 +81,8 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="
-          bg-slate-50 dark:bg-slate-800
-          border border-slate-200 dark:border-slate-700
+          bg-slate-50 dark:bg-teal-800
+          border border-slate-200 dark:border-teal-700
           rounded-xl p-10
           hover:shadow-md transition
           text-center
@@ -94,19 +94,19 @@ export default function AboutPage() {
           w-14 h-14 mx-auto mb-6
           flex items-center justify-center
           rounded-full
-          bg-blue-100 dark:bg-slate-700
+          bg-blue-100 dark:bg-teal-700
         "
               >
-                <Icon className="w-7 h-7 text-blue-700 dark:text-blue-400" />
+                <Icon className="w-7 h-7 text-blue-700 dark:text-[#fdd3ad]" />
               </div>
 
               {/* TITLE */}
-              <h3 className="text-lg font-semibold mb-4 text-slate-900 dark:text-slate-100">
+              <h3 className="text-lg font-semibold mb-4 text-slate-900 dark:text-[#E6C8A6]">
                 {title}
               </h3>
 
               {/* TEXT */}
-              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-[#F5E1D0] text-sm leading-relaxed">
                 {desc}
               </p>
             </motion.div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+      <section className="py-20 bg-slate-50 dark:bg-teal-950 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
             variants={fadeUp}
@@ -142,7 +142,7 @@ export default function AboutPage() {
       </section>
 
       {/* CEO MESSAGE */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+      <section className="py-20 bg-white dark:bg-teal-800 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
             variants={fadeUp}
@@ -179,7 +179,7 @@ export default function AboutPage() {
               whileInView="show"
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-10"
+              className="bg-white dark:bg-teal-950 border border-slate-200 dark:border-slate-800 rounded-lg p-10"
             >
               <div className="text-4xl font-semibold text-blue-700 dark:text-blue-400 mb-2">
                 <Counter value={stat.value} />
@@ -194,7 +194,7 @@ export default function AboutPage() {
       </section>
 
       {/* VALUES */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
+      <section className="py-20 bg-white dark:bg-teal-800 border-y border-slate-200 dark:border-teal-700">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-12 text-center">
           {[ShieldCheck, Leaf, Cpu, Target].map((Icon, i) => (
             <motion.div
@@ -220,7 +220,7 @@ export default function AboutPage() {
 
       {/* TIMELINE (CENTER LINE STYLE) */}
       <section className="py-20 relative">
-        <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-300 dark:bg-slate-800 hidden md:block" />
+        <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-300 dark:bg-teal-800 hidden md:block" />
 
         <div className="max-w-5xl mx-auto px-6 space-y-16">
           {[
@@ -253,16 +253,16 @@ export default function AboutPage() {
       </section>
 
       {/* TEAM */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+      <section className="py-20 bg-white dark:bg-teal-800 border-t border-slate-200 dark:border-teal-700">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 text-center">
           {[1, 2, 3].map((_, i) => (
             <div
               key={i}
-              className="bg-slate-100 dark:bg-slate-800 rounded-lg p-8"
+              className="bg-slate-100 dark:bg-teal-900 rounded-lg p-8"
             >
               <div className="h-32 w-32 mx-auto rounded-full bg-slate-300 dark:bg-slate-700 mb-6" />
               <h3 className="font-semibold">Team Member</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-500 dark:text-teal-400">
                 Position / Role
               </p>
             </div>
@@ -285,7 +285,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-blue-700 text-white text-center">
+      <section className="py-20 bg-[#E3C257] dark:bg-teal-950 text-white text-center">
         <h2 className="text-3xl font-semibold mb-6">Partner With Maxirain</h2>
         <p className="mb-8">
           Let’s build sustainable and efficient water systems together.
