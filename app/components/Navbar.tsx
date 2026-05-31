@@ -109,14 +109,14 @@ export default function Navbar({ lang }: { lang: Lang }) {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-[#085E5A] border-t border-slate-200 dark:border-slate-800">
+        <div className="md:hidden bg-[#E6C8A6] dark:bg-[#085E5A] dark:text-[#fdd3ad] border-t border-teal-700 dark:border-slate-800">
           <div className="flex flex-col px-6 py-4 space-y-4 text-sm font-medium">
             {navLinks.map((link, i) => (
               <Link
                 key={i}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="hover:text-[#F5E1D0] dark:hover:text-teal-400 transition"
+                className="hover:text-[#F5E1D0] text-teal-800 dark:hover:text-teal-400 font-bold transition"
               >
                 {link.name}
               </Link>
