@@ -102,12 +102,15 @@
       "validation": {
         "nameRequired": "اسم المنتج مطلوب",
         "descriptionRequired": "وصف المنتج مطلوب",
+        "priceRequired": "سعرالمنتج مطلوب",
+        "priceNumber": "يجب ان يكون السعر اكبر من صفر",
         "imageRequired": "صورة المنتج مطلوبة",
         "imageType": "يجب أن تكون صورة المنتج من نوع JPEG أو PNG ",
         "imageSize": "يجب ألا يتجاوز حجم صورة المنتج 2 ميجابايت",
         "nameMin": "يجب أن يكون اسم المنتج على الأقل 3 أحرف",
         "nameMax": "يجب أن يكون اسم المنتج أقل من 50 حرفًا",
-        "descriptionMax": "يجب أن يكون وصف المنتج أقل من 255 حرفًا"
+        "descriptionMax": "يجب أن يكون وصف المنتج أقل من 255 حرفًا",
+        "categoryRequired": "اختيار قسم للمنتج مطلوب"
       }
     }
   },
@@ -131,6 +134,18 @@
     "imageHint": "JPG / PNG / WEBP — الحد الأقصى للحجم 2MB",
     "imageUpload": "اسحب وأفلت صورتك هنا، أو انقر لتحديد ملف",
     "numberType": "ar-SA",
-    "messageSucss": "تم إرسال الرسالة بنجاح."
+    "messageSucss": "تم إرسال الرسالة بنجاح.",
+    "showing": "اظهار",
+    "of": "من ",
+    "products": "المنتجات"
+  },
+  "filters": {
+    "search": "ابحث عن المنتج",
+    "category": "جميع الأقسام",
+    "status": "الحالة",
+    "minPrice": "اقل سعر",
+    "maxPrice": "اكبر سعر",
+    "reset": "إعادة ضبط الفلاتر",
+    "filterHero": "منتجات مُفلترة"
   }
 }

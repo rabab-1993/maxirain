@@ -36,6 +36,12 @@ export default function ProductsDashboard() {
     message: string;
     type: "success" | "error";
   } | null>(null);
+
+  const [search, setSearch] = useState("");
+  const [filterCategoryId, setFilterCategoryId] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const acceptedTypes = useMemo(
     () => ["image/jpeg", "image/png", "image/webp"],
     [],
@@ -60,11 +66,11 @@ export default function ProductsDashboard() {
     const maxSize = 2 * 1024 * 1024;
 
     if (!acceptedTypes.includes(file.type)) {
-      return "Unsupported image type. Please use JPG, PNG, or WEBP";
+      return t("admin.products.validation.imageType");
     }
 
     if (file.size > maxSize) {
-      return "Image size must not exceed 2MB";
+      return t("admin.products.validation.imageSize");
     }
 
     return "";
@@ -74,25 +80,27 @@ export default function ProductsDashboard() {
     const nextErrors: ProductFormErrors = {};
 
     if (!form.name.trim()) {
-      nextErrors.name = "name is required";
+      nextErrors.name = t("admin.products.validation.nameRequired");
     }
 
     if (!form.price.trim()) {
-      nextErrors.price = "price is required";
+      nextErrors.price = t("admin.products.validation.priceRequired");
     } else if (Number(form.price) <= 0) {
-      nextErrors.price = "price must be greater than zero";
+      nextErrors.price = t("admin.products.validation.priceNumber");
     }
 
     if (!form.description.trim()) {
-      nextErrors.description = "description is required";
+      nextErrors.description = t(
+        "admin.products.validation.descriptionRequired",
+      );
     }
 
     if (!form.categoryId.trim()) {
-      nextErrors.categoryId = "selecting a category is required";
+      nextErrors.categoryId = t("admin.products.validation.categoryRequired");
     }
 
     if (!editing && !form.image) {
-      nextErrors.image = "product image is required";
+      nextErrors.image = t("admin.products.validation.imageRequired");
     }
 
     return nextErrors;
@@ -235,7 +243,49 @@ export default function ProductsDashboard() {
     }
   };
 
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const productName = product.name.toLowerCase();
+      const productDescription = (product.description || "").toLowerCase();
+      const searchValue = search.trim().toLowerCase();
+
+      const matchesSearch =
+        !searchValue ||
+        productName.includes(searchValue) ||
+        productDescription.includes(searchValue);
+
+      const matchesCategory =
+        filterCategoryId === "all" ||
+        String(product.categoryId) === filterCategoryId;
+
+      const matchesStatus =
+        filterStatus === "all" || String(product.isVisible) === filterStatus;
+
+      const price = Number(product.price);
+
+      const matchesMinPrice = !minPrice || price >= Number(minPrice);
+      const matchesMaxPrice = !maxPrice || price <= Number(maxPrice);
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesStatus &&
+        matchesMinPrice &&
+        matchesMaxPrice
+      );
+    });
+  }, [products, search, filterCategoryId, filterStatus, minPrice, maxPrice]);
+
   const totalProducts = products.length;
+  const filteredCount = filteredProducts.length;
+
+  const resetFilters = () => {
+    setSearch("");
+    setFilterCategoryId("all");
+    setFilterStatus("all");
+    setMinPrice("");
+    setMaxPrice("");
+  };
 
   if (loading) {
     return (
@@ -297,11 +347,88 @@ export default function ProductsDashboard() {
             {totalProducts.toLocaleString(t("common.numberType"))}
           </p>
         </div>
+
+        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6 dark:bg-[#0e514c]">
+          <p className="text-sm text-slate-500 dark:text-[#fdd3ad]">
+            {t("filters.filterHero")}
+          </p>
+          <p className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-[#F5E1D0]">
+            {filteredCount.toLocaleString(t("common.numberType"))}
+          </p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="rounded-2xl bg-white p-4 shadow-sm dark:bg-[#0e514c]">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t("filters.search")}
+            className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-teal-600 dark:border-[#012926] dark:bg-[#085E5A] dark:text-[#F5E1D0] dark:placeholder:text-[#fdd3ad]/70"
+          />
+
+          <select
+            value={filterCategoryId}
+            onChange={(e) => setFilterCategoryId(e.target.value)}
+            className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-teal-600 dark:border-[#012926] dark:bg-[#085E5A] dark:text-[#F5E1D0]"
+          >
+            <option value="all">{t("filters.category")}</option>
+            {categories.map((category) => (
+              <option key={category.id} value={String(category.id)}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-teal-600 dark:border-[#012926] dark:bg-[#085E5A] dark:text-[#F5E1D0]"
+          >
+            <option value="all">{t("filters.status")}</option>
+            <option value="true"> {t("admin.products.fields.visible")}</option>
+            <option value="false">{t("admin.products.fields.hidden")}</option>
+          </select>
+
+          <input
+            type="number"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            placeholder={t("filters.minPrice")}
+            className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-teal-600 dark:border-[#012926] dark:bg-[#085E5A] dark:text-[#F5E1D0] dark:placeholder:text-[#fdd3ad]/70"
+          />
+
+          <input
+            type="number"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            placeholder={t("filters.maxPrice")}
+            className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-teal-600 dark:border-[#012926] dark:bg-[#085E5A] dark:text-[#F5E1D0] dark:placeholder:text-[#fdd3ad]/70"
+          />
+
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#fdd3ad] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
+          >
+            {t("filters.reset")}
+          </button>
+        </div>
+
+        <p className="mt-3 text-sm text-slate-500 dark:text-[#fdd3ad]">
+          {t("common.showing")}{" "}
+          {filteredCount.toLocaleString(t("common.numberType"))}{" "}
+          {t("common.of")}
+          {totalProducts.toLocaleString(t("common.numberType"))}{" "}
+          {t("common.products")}
+        </p>
       </div>
 
       {/* Desktop Table */}
       <div className="hidden overflow-hidden rounded-2xl bg-white shadow-sm lg:block dark:bg-[#0e514c]">
-        {products.length > 0 ? (
+        {filteredProducts.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-245">
               <thead className="bg-slate-50 dark:bg-[#0e514c]">
@@ -331,7 +458,7 @@ export default function ProductsDashboard() {
               </thead>
 
               <tbody>
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <tr
                     key={product.id}
                     className="border-t border-slate-100 transition hover:bg-slate-50/70 dark:border-[#012926] dark:hover:bg-[#058078]/70"
@@ -416,8 +543,8 @@ export default function ProductsDashboard() {
 
       {/* Mobile / Tablet Cards */}
       <div className="grid gap-4 lg:hidden">
-        {products.length > 0 ? (
-          products.map((product) => (
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
             <div
               key={product.id}
               className="rounded-2xl bg-white p-4 shadow-sm sm:p-5 dark:bg-[#0e514c]"
@@ -458,11 +585,11 @@ export default function ProductsDashboard() {
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     {product.isVisible ? (
                       <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:text-green-100 dark:bg-green-700">
-                        {t("admin.products.fields.available")}
+                        {t("admin.products.fields.visible")}
                       </span>
                     ) : (
                       <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:text-red-100 dark:bg-red-800">
-                        {t("admin.products.fields.outOfStock")}
+                        {t("admin.products.fields.hidden")}
                       </span>
                     )}
 
@@ -510,7 +637,7 @@ export default function ProductsDashboard() {
               <button
                 onClick={() => setDeleteId(null)}
                 className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-medium
-                 text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926] 
+                 text-slate-700 transition hover:bg-slate-50 sm:w-auto dark:border-[#012926]
                 dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70 cursor-pointer"
               >
                 {t("common.cancel")}
@@ -806,17 +933,6 @@ export default function ProductsDashboard() {
                             ? t("common.edit")
                             : t("common.save")}
                       </button>
-                      {/* <button
-                        type="submit"
-                        disabled={submitting}
-                        className="cursor-pointer w-full rounded-xl bg-teal-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto dark:bg-[#012926] dark:text-[#fdd3ad] dark:hover:bg-[#058078]/70"
-                      >
-                        {submitting
-                          ? t("common.saving")
-                          : editing
-                            ? t("common.edit")
-                            : t("common.save")}
-                      </button> */}
                     </div>
                   </form>
                 </div>

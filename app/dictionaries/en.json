@@ -102,12 +102,15 @@
       "validation": {
         "nameRequired": "Proudct name is required",
         "descriptionRequired": "Proudct description is required",
+        "priceRequired": "price is required",
+        "priceNumber": "price must be greater than zero",
         "imageRequired": "Proudct image is required",
         "imageType": "Proudct image must be in JPG, PNG, or WEBP format",
         "imageSize": "Proudct image size must not exceed 2MB",
         "nameMin": "Proudct name must be at least 3 characters",
         "nameMax": "Proudct name must be less than 50 characters",
-        "descriptionMax": "Proudct description must be less than 255 characters"
+        "descriptionMax": "Proudct description must be less than 255 characters",
+        "categoryRequired": "selecting a category is required"
       }
     }
   },
@@ -129,6 +132,18 @@
     "image": "Choose Image",
     "numberType": "en-US",
     "currency": "SAR",
-    "messageSucss": "Message sent successfully."
+    "messageSucss": "Message sent successfully.",
+    "showing": "Showing",
+    "of": "of ",
+    "products": "products"
+  },
+  "filters": {
+    "search": "Search product",
+    "category": "All Categories",
+    "status": "All Stastus",
+    "minPrice": "Min price",
+    "maxPrice": " Max price",
+    "reset": "Reset Filters",
+    "filterHero": "Filtered Products"
   }
 }
